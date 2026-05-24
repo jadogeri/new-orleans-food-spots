@@ -1,6 +1,6 @@
-export * from "./users";
-export * from "./businesses";
-export * from "./accounts";
-export * from "./sessions";
-export * from "./verifications";
+export * from "./users.js";
+export * from "./businesses.js";
+export * from "./accounts.js";
+export * from "./sessions.js";
+export * from "./verifications.js";
 
