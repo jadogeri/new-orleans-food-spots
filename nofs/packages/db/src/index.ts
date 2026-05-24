@@ -1,16 +1,17 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import * as schema from "./schema/index.js"; // 👈 NO EXTENSION
+import * as schema from "./schema/index.js";
 import * as dotenv from "dotenv";
+import path from "path";
 
-dotenv.config(); 
-
+// 💡 FIXED: Tell the DB package exactly how to look up out of its own folder and find the root .env
+dotenv.config({ path: path.resolve(import.meta.dirname, "../../../.env") }); 
 
 export const client = createClient({
-  url: process.env.TURSO_DATABASE_URL!,
+  url: process.env.TURSO_DATABASE_URL!, // 👈 This will now grab the variable successfully!
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
 export const db = drizzle({ client, schema });
 
-export * from "./schema/index.js"; // 👈 NO EXTENSION
+export * from "./schema/index.js";

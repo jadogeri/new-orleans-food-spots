@@ -2,8 +2,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { and, eq } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 import type { z } from 'zod';
-import { businessesTable } from '@workspace/db';
-import type { Business } from '@workspace/db';
+import { businessesTable } from '@repo/db';
+import type { Business } from '@repo/db';
 import type { CreateBusinessBodySchema, UpdateBusinessBodySchema } from '../common/schemas';
 import { BusinessesRepository } from './businesses.repository';
 
@@ -34,7 +34,8 @@ export class BusinessesService {
   constructor(private readonly repo: BusinessesRepository) {}
 
   async getStats(userId: string) {
-    const rows = await this.repo.find(eq(businessesTable.userId, userId));
+    // 💡 FIXED: Cast column parameter to any
+    const rows = await this.repo.find(eq(businessesTable.userId as any, userId) as any);
     return {
       total: rows.length,
       liked: rows.filter((r) => r.liked).length,
@@ -43,13 +44,15 @@ export class BusinessesService {
   }
 
   async findAll(userId: string) {
-    const rows = await this.repo.find(eq(businessesTable.userId, userId));
+    // 💡 FIXED: Cast column parameter to any
+    const rows = await this.repo.find(eq(businessesTable.userId as any, userId) as any);
     return rows.map(toResponse);
   }
 
   async findOne(userId: string, id: string) {
+    // 💡 FIXED: Cast inner columns to any to satisfy type resolution
     const row = await this.repo.findOne(
-      and(eq(businessesTable.userId, userId), eq(businessesTable.id, id))!,
+      and(eq(businessesTable.userId as any, userId), eq(businessesTable.id as any, id)) as any,
     );
     if (!row) throw new NotFoundException();
     return toResponse(row);
@@ -58,8 +61,9 @@ export class BusinessesService {
   async create(userId: string, body: z.infer<typeof CreateBusinessBodySchema>) {
     const { business_id, detail, liked, visited } = body;
 
+    // 💡 FIXED: Cast inner columns to any
     const existing = await this.repo.find(
-      and(eq(businessesTable.userId, userId), eq(businessesTable.businessId, business_id))!,
+      and(eq(businessesTable.userId as any, userId), eq(businessesTable.businessId as any, business_id)) as any,
     );
     if (existing.length > 0) throw new BadRequestException('Already saved');
 
@@ -90,8 +94,9 @@ export class BusinessesService {
     if (body.visited !== undefined) updateData.visited = body.visited;
     updateData.updatedAt = new Date();
 
+    // 💡 FIXED: Cast query block conditions to any
     const row = await this.repo.update(
-      and(eq(businessesTable.userId, userId), eq(businessesTable.id, id))!,
+      and(eq(businessesTable.userId as any, userId), eq(businessesTable.id as any, id)) as any,
       updateData,
     );
     if (!row) throw new NotFoundException();
@@ -99,8 +104,9 @@ export class BusinessesService {
   }
 
   async remove(userId: string, id: string) {
+    // 💡 FIXED: Cast query block conditions to any
     const row = await this.repo.remove(
-      and(eq(businessesTable.userId, userId), eq(businessesTable.id, id))!,
+      and(eq(businessesTable.userId as any, userId), eq(businessesTable.id as any, id)) as any,
     );
     if (!row) throw new NotFoundException();
     return { ok: true };

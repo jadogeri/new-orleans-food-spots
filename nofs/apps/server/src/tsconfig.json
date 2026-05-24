@@ -1,24 +1,23 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",    
     "rootDir": "src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "isolatedModules": false,
     "strictPropertyInitialization": false,
-    "types": ["node"]
+    "types": ["node"],
+    
+    // ❌ REMOVED: "baseUrl": ".",
+    
+    // 💡 FIXED: Define path shortcuts cleanly without a baseUrl property
+    "paths": {
+      "@repo/db": ["../../packages/db/src/index.ts"]
+    }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"],
-  "ts-node": {
-    "swc": true,
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "CommonJS",
-      "moduleResolution": "node",
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true
-    }
-  }
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,3 +1,11 @@
+// 💡 STEP 1: Put environment setup imports at the ABSOLUTE top of the file
+import * as dotenv from 'dotenv';
+import path from 'path';
+
+// 💡 STEP 2: Execute config mapping BEFORE loading any app frameworks or module structures
+dotenv.config();
+
+// 💡 STEP 3: Now it is safe to declare application framework imports
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -6,10 +14,10 @@ import { logger } from './lib/logger';
 import { AllExceptionsFilter } from './common/all-exceptions.filter';
 
 async function bootstrap() {
-  const rawPort = process.env['PORT'];
-  if (!rawPort) throw new Error('PORT environment variable is required');
+  const rawPort = process.env['SERVER_PORT'];
+  if (!rawPort) throw new Error('SERVER_PORT environment variable is required');
   const port = Number(rawPort);
-  if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid PORT value: "${rawPort}"`);
+  if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid SERVER_PORT value: "${rawPort}"`);
 
   const app = await NestFactory.create(AppModule, { logger: false, abortOnError: false });
 

@@ -14,8 +14,26 @@ export const logger = pino({
     ? {}
     : {
         transport: {
-          target: join(__dirname, "pino-pretty.js"),
+          target: require.resolve('pino-pretty'),
           options: { colorize: true },
         },
       }),
 });
+
+
+
+// import pino from 'pino';
+
+// export const logger = pino({
+//   // ... your other options
+//   transport: {
+//     // 💡 FIXED: Passing the module via require ensures the thread-stream worker 
+//     // resolves it globally instead of appending a local /dist/ path on Windows
+//     target: require.resolve('pino-pretty'), 
+//     options: {
+//       colorize: true,
+//       translateTime: 'SYS:standard',
+//       // ... your other pino-pretty configurations
+//     },
+//   },
+// });

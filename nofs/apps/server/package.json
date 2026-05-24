@@ -34,6 +34,7 @@
     "better-auth": "^1.6.11",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
     "drizzle-orm": "catalog:",
     "express": "^5.2.1",
     "handlebars": "^4.7.9",
@@ -44,7 +45,6 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "zod": "catalog:"
-
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -98,4 +98,3 @@
     "testEnvironment": "node"
   }
 }
- 

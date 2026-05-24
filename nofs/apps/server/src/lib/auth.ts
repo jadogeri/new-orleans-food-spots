@@ -1,13 +1,13 @@
 import { betterAuth } from "better-auth";
 import { bearer } from "better-auth/plugins/bearer";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@workspace/db";
+import { db } from "@repo/db";
 import {
   usersTable,
   sessionsTable,
   accountsTable,
   verificationsTable,
-} from "@workspace/db";
+} from "@repo/db";
 
 if (!process.env.SESSION_SECRET) {
   throw new Error("SESSION_SECRET must be set");

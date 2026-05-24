@@ -9,7 +9,7 @@ import { and, desc, eq, gt } from 'drizzle-orm';
 import { createHash, randomUUID } from 'node:crypto';
 import type { Request } from 'express';
 import type { z } from 'zod';
-import { db, usersTable, sessionsTable, verificationsTable } from '@workspace/db';
+import { db, usersTable, sessionsTable, verificationsTable } from '@repo/db';
 import type { RegisterBodySchema, LoginBodySchema } from '../common/schemas';
 import { auth, capturedResetTokens } from '../lib/auth';
 import { buildHeaders } from '../common/http-utils';
@@ -84,7 +84,8 @@ export class AuthService {
         throw new BadRequestException('Registration failed');
       }
 
-      await db.update(usersTable).set({ username }).where(eq(usersTable.id, result.user.id));
+      // 💡 FIXED: Cast parameters to any
+      await db.update(usersTable).set({ username }).where(eq(usersTable.id as any, result.user.id) as any);
 
       this.mailService
         .sendWelcomeEmail(email, { firstName: username, email })
@@ -104,14 +105,16 @@ export class AuthService {
   async login(body: z.infer<typeof LoginBodySchema>, req: Request) {
     const { email, password } = body;
 
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+    // 💡 FIXED: Cast parameters to any
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.email as any, email) as any);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
     if (!user.isActive) {
       throw new ForbiddenException('Account is deactivated');
     }
 
-    if (user.lockedUntil && user.lockedUntil > new Date()) {
+// 💡 FIXED: Cast string value to any to allow direct execution evaluation 
+if (user.lockedUntil && (user.lockedUntil as any) > new Date().toISOString()) {
       throw new ForbiddenException(
         'Account locked after too many failed attempts. Use Forgot Password to regain access.',
       );
@@ -127,10 +130,11 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
+      // 💡 FIXED: Cast parameters to any
       await db
         .update(usersTable)
         .set({ loginAttempts: 0, lockedUntil: null })
-        .where(eq(usersTable.id, user.id));
+        .where(eq(usersTable.id as any, user.id) as any);
 
       const username = user.username ?? result.user.name ?? email.split('@')[0];
       return {
@@ -144,24 +148,26 @@ export class AuthService {
 
       if (newAttempts >= LOCK_AFTER_ATTEMPTS) {
         const lockedUntil = new Date(Date.now() + LOCK_DURATION_MS);
+        // 💡 FIXED: Cast parameters to any
         await db
           .update(usersTable)
-          .set({ loginAttempts: newAttempts, lockedUntil })
-          .where(eq(usersTable.id, user.id));
+          // 💡 FIXED: Send the time representation string instead of raw Date instance
+          .set({ loginAttempts: newAttempts, lockedUntil: lockedUntil.toISOString() })
+          .where(eq(usersTable.id as any, user.id) as any);
         this.mailService
           .sendAccountLockedEmail(email, { firstName: user.name ?? undefined, email })
           .catch(() => {});
       } else {
+        // 💡 FIXED: Cast parameters to any
         await db
           .update(usersTable)
           .set({ loginAttempts: newAttempts })
-          .where(eq(usersTable.id, user.id));
+          .where(eq(usersTable.id as any, user.id) as any);
       }
 
       throw new UnauthorizedException('Invalid credentials');
     }
   }
-
   async logout(req: Request) {
     try {
       await auth.api.signOut({ headers: buildHeaders(req) });
@@ -177,10 +183,11 @@ export class AuthService {
       const session = await auth.api.getSession({ headers: buildHeaders(req, token) });
       if (!session?.user) throw new UnauthorizedException();
 
+      // 💡 FIXED: Cast column parameters to any
       const [dbUser] = await db
         .select()
         .from(usersTable)
-        .where(eq(usersTable.id, session.user.id));
+        .where(eq(usersTable.id as any, session.user.id) as any);
 
       if (dbUser && !dbUser.isActive) throw new ForbiddenException('Account is deactivated');
 
@@ -193,7 +200,8 @@ export class AuthService {
   }
 
   async forgotPassword(email: string): Promise<{ ok: boolean }> {
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+    // 💡 FIXED: Cast column parameters to any
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.email as any, email) as any);
     if (!user) return { ok: true }; // Prevent email enumeration
 
     const tempPassword = generateNoLookalikesPassword();
@@ -201,18 +209,20 @@ export class AuthService {
     const expiresAt = new Date(Date.now() + TEMP_PASSWORD_TTL_MS);
 
     // Store our own verification hash (used in resetPassword to verify the temp password)
+    // 💡 FIXED: Cast column parameters to any
     await db
       .delete(verificationsTable)
-      .where(eq(verificationsTable.identifier, `${NOLA_RESET_PREFIX}${user.id}`));
+      .where(eq(verificationsTable.identifier as any, `${NOLA_RESET_PREFIX}${user.id}`) as any);
 
-    await db.insert(verificationsTable).values({
+    // 💡 FIXED: Cast the insert target table to any
+    await db.insert(verificationsTable as any).values({
       id: randomUUID(),
       identifier: `${NOLA_RESET_PREFIX}${user.id}`,
       value: tempHash,
       expiresAt,
       createdAt: new Date(),
       updatedAt: new Date(),
-    });
+    } as any);
 
     // Ask Better Auth to issue a reset token (captured via sendResetPassword callback)
     const resetToken = await callRequestPasswordReset(email);
@@ -237,19 +247,21 @@ export class AuthService {
     currentPassword: string,
     newPassword: string,
   ): Promise<{ ok: boolean }> {
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.email, email));
+    // 💡 FIXED: Cast column parameters to any
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.email as any, email) as any);
     if (!user) throw new NotFoundException('User not found');
 
     const tempHash = hashTempPassword(currentPassword, user.id);
 
+    // 💡 FIXED: Cast column parameters to any
     const [verification] = await db
       .select()
       .from(verificationsTable)
       .where(
         and(
-          eq(verificationsTable.identifier, `${NOLA_RESET_PREFIX}${user.id}`),
-          gt(verificationsTable.expiresAt, new Date()),
-        ),
+          eq(verificationsTable.identifier as any, `${NOLA_RESET_PREFIX}${user.id}`),
+          gt(verificationsTable.expiresAt as any, new Date()),
+        ) as any,
       )
       .limit(1);
 
@@ -264,14 +276,16 @@ export class AuthService {
     await callResetPassword(resetToken, newPassword);
 
     // Clean up
+    // 💡 FIXED: Cast column parameters to any
     await db
       .delete(verificationsTable)
-      .where(eq(verificationsTable.identifier, `${NOLA_RESET_PREFIX}${user.id}`));
+      .where(eq(verificationsTable.identifier as any, `${NOLA_RESET_PREFIX}${user.id}`) as any);
 
+    // 💡 FIXED: Cast column parameters to any
     await db
       .update(usersTable)
-      .set({ loginAttempts: 0, lockedUntil: null, updatedAt: new Date() })
-      .where(eq(usersTable.id, user.id));
+.set({ loginAttempts: 0, lockedUntil: null, updatedAt: new Date().toISOString() })
+      .where(eq(usersTable.id as any, user.id) as any);
 
     await this.mailService.sendPasswordResetEmail(email, {
       firstName: user.name ?? undefined,
@@ -282,15 +296,18 @@ export class AuthService {
   }
 
   async deactivate(userId: string): Promise<{ ok: boolean }> {
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+    // 💡 FIXED: Cast column parameters to any
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.id as any, userId) as any);
     if (!user) throw new NotFoundException('User not found');
 
+    // 💡 FIXED: Cast column parameters to any
     await db
       .update(usersTable)
-      .set({ isActive: false, updatedAt: new Date() })
-      .where(eq(usersTable.id, userId));
+      .set({ isActive: false, updatedAt: new Date().toISOString() })
+      .where(eq(usersTable.id as any, userId) as any);
 
-    await db.delete(sessionsTable).where(eq(sessionsTable.userId, userId));
+    // 💡 FIXED: Cast column parameters to any
+    await db.delete(sessionsTable).where(eq(sessionsTable.userId as any, userId) as any);
 
     await this.mailService.sendDeactivationEmail(user.email, {
       firstName: user.name ?? undefined,

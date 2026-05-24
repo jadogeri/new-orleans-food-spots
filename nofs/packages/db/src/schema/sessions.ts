@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-import { usersTable } from "./users";
+import { usersTable } from "./users.js";
 
 export const sessionsTable = sqliteTable("sessions", {
   id: text("id").primaryKey(),

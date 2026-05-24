@@ -23,19 +23,19 @@
     "db:migrate": {
       "cache": false
     },
-    "db:studio": {
-      "cache": false
-    },
     "db:drop": {
       "cache": false
     },
     "db:test": {
       "cache": false
     },
+    "db:studio": {
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^codegen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", "*.tsbuildinfo"]
+      "outputs": ["dist/**", "*.tsbuildinfo", ".next/**"]
     },
     "typecheck": {
       "dependsOn": ["^codegen"],
@@ -58,6 +58,6 @@
     "start": {
       "cache": false,
       "persistent": true
-    }    
+    }
   }
 }
