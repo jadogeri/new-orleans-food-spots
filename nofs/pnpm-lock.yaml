@@ -6,8 +6,11 @@ settings:
 
 catalogs:
   default:
+    '@tanstack/react-query':
+      specifier: ^5.90.21
+      version: 5.100.13
     '@types/node':
-      specifier: ^25.3.3
+      specifier: ^25.9.1
       version: 25.9.1
     tsx:
       specifier: ^4.21.0
@@ -263,11 +266,26 @@ importers:
         specifier: ^8.20.0
         version: 8.59.4(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.2)
 
+  packages/api-client-react:
+    dependencies:
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.100.13(react@19.2.6)
+
   packages/api-spec:
     devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.1
       orval:
         specifier: ^8.9.1
         version: 8.12.3(prettier@3.8.3)(typescript@6.0.3)
+
+  packages/api-zod:
+    dependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.76
 
   packages/db:
     dependencies:
@@ -1300,6 +1318,14 @@ packages:
 
   '@sinonjs/fake-timers@15.4.0':
     resolution: {integrity: sha512-DsG+8/LscQIQg68J6Ef3dv10u6nVyetYn923s3/sus5eaGfTo1of5WMZSLf0UJc9KDuKPilPH0UDJCjvNbDNCA==}
+
+  '@tanstack/query-core@5.100.13':
+    resolution: {integrity: sha512-mlKVKMTzZWGTKAC1CKOgt7axAjJ921emkEvYIp27I/PdP1yEYL/BteLY8iK35gn8hoYeKB4mgJ/ve3lrDI6/Fw==}
+
+  '@tanstack/react-query@5.100.13':
+    resolution: {integrity: sha512-HSBr8CycQEAoXsJR7KNDawBnINJEJ96Eme8oE0hCXjyodE2I97vg3IDzDJBDu18LsbzpVVJcKo80eqLfVCykxw==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tokenizer/inflate@0.4.1':
     resolution: {integrity: sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA==}
@@ -5750,6 +5776,13 @@ snapshots:
   '@sinonjs/fake-timers@15.4.0':
     dependencies:
       '@sinonjs/commons': 3.0.1
+
+  '@tanstack/query-core@5.100.13': {}
+
+  '@tanstack/react-query@5.100.13(react@19.2.6)':
+    dependencies:
+      '@tanstack/query-core': 5.100.13
+      react: 19.2.6
 
   '@tokenizer/inflate@0.4.1':
     dependencies:
