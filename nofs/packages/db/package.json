@@ -22,7 +22,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:drop": "drizzle-kit drop",
-    "test": "tsx src/test-db.ts" 
+    "test": "tsx src/test-db.ts",
+    "pnpm:approve-builds":"pnpm approve-builds"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
