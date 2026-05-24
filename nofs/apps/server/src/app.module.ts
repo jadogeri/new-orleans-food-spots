@@ -7,6 +7,13 @@ import { MailModule } from './mail/mail.module';
 import { TasksModule } from './tasks/tasks.module';
 
 @Module({
-  imports: [MailModule, HealthModule, AuthModule, BusinessesModule, YelpModule, TasksModule],
+  imports: [
+    MailModule,
+    HealthModule,
+    AuthModule,
+    BusinessesModule,
+    YelpModule,
+    TasksModule,
+  ],
 })
 export class AppModule {}

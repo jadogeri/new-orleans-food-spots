@@ -47,7 +47,12 @@ export default function History() {
         title: "Spot removed",
         description: `${name} has been removed from your history.`,
       });
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Failed to remove spot:", err.message);
+      } else {
+        console.error("Failed to remove spot with unknown error:", err);
+      }
       toast({
         title: "Failed to remove",
         variant: "destructive",

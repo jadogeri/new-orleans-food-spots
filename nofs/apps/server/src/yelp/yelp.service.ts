@@ -28,7 +28,9 @@ export class YelpService {
       const response = await yelpClient.get(`/${id}`);
       return response.data;
     } catch (err: unknown) {
-      throw new InternalServerErrorException('Failed to fetch business from Yelp');
+      throw new InternalServerErrorException(
+        'Failed to fetch business from Yelp',
+      );
     }
   }
 }

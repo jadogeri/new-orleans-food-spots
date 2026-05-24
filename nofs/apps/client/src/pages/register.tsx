@@ -47,7 +47,7 @@ export default function Register() {
       await setToken(response.token);
       toast({ title: "Welcome to NOLA Spots!" });
       setLocation("/dashboard");
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Registration Failed",
         description: "Please check your details and try again.",

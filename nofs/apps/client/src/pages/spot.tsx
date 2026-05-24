@@ -88,7 +88,12 @@ export default function SpotDetail() {
       }
       queryClient.invalidateQueries({ queryKey: getGetBusinessesQueryKey() });
       queryClient.invalidateQueries({ queryKey: getGetBusinessStatsQueryKey() });
-    } catch (e) {
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error("Failed to update saved spot:", e.message);
+      } else {
+        console.error("Failed to update saved spot with unknown error:", e);
+      }
       toast({ title: "Failed to update saved spot", variant: "destructive" });
     }
   };
@@ -104,7 +109,12 @@ export default function SpotDetail() {
       queryClient.invalidateQueries({ queryKey: getGetBusinessesQueryKey() });
       queryClient.invalidateQueries({ queryKey: getGetBusinessStatsQueryKey() });
       toast({ title: `Marked as ${!currentValue ? field : "not " + field}` });
-    } catch (e) {
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error("Failed to update spot status:", e.message);
+      } else {
+        console.error("Failed to update spot status with unknown error:", e);
+      }
       toast({ title: "Failed to update", variant: "destructive" });
     }
   };

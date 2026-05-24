@@ -19,7 +19,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const body = exception.getResponse();
-      message = typeof body === 'string' ? body : (body as { message?: string }).message ?? message;
+      message =
+        typeof body === 'string'
+          ? body
+          : ((body as { message?: string }).message ?? message);
     } else {
       // Log unexpected errors so we can diagnose them
       process.stderr.write(

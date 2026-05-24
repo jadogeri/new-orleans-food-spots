@@ -29,27 +29,21 @@ export abstract class BaseRepository<TSelect, TInsert> {
   }
 
   async save(data: TInsert): Promise<TSelect> {
-    const [row] = await this.db
-      .insert(this.table)
-      .values(data as never)
-      .returning();
+    const [row] = await this.db.insert(this.table).values(data).returning();
     return row as TSelect;
   }
 
   async update(where: SQL, data: Partial<TInsert>): Promise<TSelect | null> {
     const [row] = await this.db
       .update(this.table)
-      .set(data as never)
+      .set(data)
       .where(where)
       .returning();
     return (row as TSelect) ?? null;
   }
 
   async remove(where: SQL): Promise<TSelect | null> {
-    const [row] = await this.db
-      .delete(this.table)
-      .where(where)
-      .returning();
+    const [row] = await this.db.delete(this.table).where(where).returning();
     return (row as TSelect) ?? null;
   }
 }

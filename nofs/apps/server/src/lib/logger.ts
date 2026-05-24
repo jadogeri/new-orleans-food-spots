@@ -1,13 +1,13 @@
-import pino from "pino";
-import { join } from "node:path";
+import pino from 'pino';
+import { join } from 'node:path';
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 export const logger = pino({
-  level: process.env.LOG_LEVEL ?? "info",
+  level: process.env.LOG_LEVEL ?? 'info',
   redact: [
-    "req.headers.authorization",
-    "req.headers.cookie",
+    'req.headers.authorization',
+    'req.headers.cookie',
     "res.headers['set-cookie']",
   ],
   ...(isProduction
@@ -20,16 +20,14 @@ export const logger = pino({
       }),
 });
 
-
-
 // import pino from 'pino';
 
 // export const logger = pino({
 //   // ... your other options
 //   transport: {
-//     // 💡 FIXED: Passing the module via require ensures the thread-stream worker 
+//     // 💡 FIXED: Passing the module via require ensures the thread-stream worker
 //     // resolves it globally instead of appending a local /dist/ path on Windows
-//     target: require.resolve('pino-pretty'), 
+//     target: require.resolve('pino-pretty'),
 //     options: {
 //       colorize: true,
 //       translateTime: 'SYS:standard',

@@ -27,7 +27,8 @@ export class AuthController {
   @Post('register')
   @HttpCode(201)
   register(
-    @Body(lazyZodPipe(() => RegisterBodySchema)) body: z.infer<typeof RegisterBodySchema>,
+    @Body(lazyZodPipe(() => RegisterBodySchema))
+    body: z.infer<typeof RegisterBodySchema>,
     @Req() req: Request,
   ) {
     return this.authService.register(body, req);
@@ -36,7 +37,8 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   login(
-    @Body(lazyZodPipe(() => LoginBodySchema)) body: z.infer<typeof LoginBodySchema>,
+    @Body(lazyZodPipe(() => LoginBodySchema))
+    body: z.infer<typeof LoginBodySchema>,
     @Req() req: Request,
   ) {
     return this.authService.login(body, req);
@@ -56,7 +58,8 @@ export class AuthController {
   @Post('forgot-password')
   @HttpCode(200)
   forgotPassword(
-    @Body(lazyZodPipe(() => ForgotPasswordBodySchema)) body: z.infer<typeof ForgotPasswordBodySchema>,
+    @Body(lazyZodPipe(() => ForgotPasswordBodySchema))
+    body: z.infer<typeof ForgotPasswordBodySchema>,
   ) {
     return this.authService.forgotPassword(body.email);
   }
@@ -64,9 +67,14 @@ export class AuthController {
   @Post('reset-password')
   @HttpCode(200)
   resetPassword(
-    @Body(lazyZodPipe(() => ResetPasswordBodySchema)) body: z.infer<typeof ResetPasswordBodySchema>,
+    @Body(lazyZodPipe(() => ResetPasswordBodySchema))
+    body: z.infer<typeof ResetPasswordBodySchema>,
   ) {
-    return this.authService.resetPassword(body.email, body.currentPassword, body.newPassword);
+    return this.authService.resetPassword(
+      body.email,
+      body.currentPassword,
+      body.newPassword,
+    );
   }
 
   @Post('deactivate')

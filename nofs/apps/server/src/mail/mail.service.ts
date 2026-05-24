@@ -28,8 +28,18 @@ export class MailService {
     };
   }
 
-  async sendEmail(to: string, folder: string, context: MailContext): Promise<void> {
-    const subjectPath = path.join(__dirname, 'mail', 'templates', folder, 'subject.hbs');
+  async sendEmail(
+    to: string,
+    folder: string,
+    context: MailContext,
+  ): Promise<void> {
+    const subjectPath = path.join(
+      __dirname,
+      'mail',
+      'templates',
+      folder,
+      'subject.hbs',
+    );
     let subject = 'NOLA Spots';
     try {
       const subjectTemplate = fs.readFileSync(subjectPath, 'utf8');
@@ -54,27 +64,60 @@ export class MailService {
         }
       }
     } catch (err: unknown) {
-      logger.error({ to, folder, err: err instanceof Error ? err.message : String(err) }, 'Mail: send failed');
+      logger.error(
+        { to, folder, err: err instanceof Error ? err.message : String(err) },
+        'Mail: send failed',
+      );
     }
   }
 
-  async sendWelcomeEmail(to: string, context: WelcomeEmailContext): Promise<void> {
-    await this.sendEmail(to, 'welcome', { ...this.getBaseContext(), ...context });
+  async sendWelcomeEmail(
+    to: string,
+    context: WelcomeEmailContext,
+  ): Promise<void> {
+    await this.sendEmail(to, 'welcome', {
+      ...this.getBaseContext(),
+      ...context,
+    });
   }
 
-  async sendForgotPasswordEmail(to: string, context: ForgotPasswordEmailContext): Promise<void> {
-    await this.sendEmail(to, 'forgot-password', { ...this.getBaseContext(), ...context });
+  async sendForgotPasswordEmail(
+    to: string,
+    context: ForgotPasswordEmailContext,
+  ): Promise<void> {
+    await this.sendEmail(to, 'forgot-password', {
+      ...this.getBaseContext(),
+      ...context,
+    });
   }
 
-  async sendPasswordResetEmail(to: string, context: PasswordResetEmailContext): Promise<void> {
-    await this.sendEmail(to, 'reset-password', { ...this.getBaseContext(), ...context });
+  async sendPasswordResetEmail(
+    to: string,
+    context: PasswordResetEmailContext,
+  ): Promise<void> {
+    await this.sendEmail(to, 'reset-password', {
+      ...this.getBaseContext(),
+      ...context,
+    });
   }
 
-  async sendAccountLockedEmail(to: string, context: AccountLockedEmailContext): Promise<void> {
-    await this.sendEmail(to, 'account-locked', { ...this.getBaseContext(), ...context });
+  async sendAccountLockedEmail(
+    to: string,
+    context: AccountLockedEmailContext,
+  ): Promise<void> {
+    await this.sendEmail(to, 'account-locked', {
+      ...this.getBaseContext(),
+      ...context,
+    });
   }
 
-  async sendDeactivationEmail(to: string, context: DeactivationEmailContext): Promise<void> {
-    await this.sendEmail(to, 'account-deactivation', { ...this.getBaseContext(), ...context });
+  async sendDeactivationEmail(
+    to: string,
+    context: DeactivationEmailContext,
+  ): Promise<void> {
+    await this.sendEmail(to, 'account-deactivation', {
+      ...this.getBaseContext(),
+      ...context,
+    });
   }
 }

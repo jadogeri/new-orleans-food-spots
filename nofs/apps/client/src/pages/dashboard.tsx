@@ -40,7 +40,12 @@ export default function Dashboard() {
         title: "Spot updated",
         description: `Marked as ${!currentValue ? field : "not " + field}`,
       });
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Failed to update spot:", err.message);
+      } else {
+        console.error("Failed to update spot with unknown error:", err);
+      }
       toast({
         title: "Failed to update",
         variant: "destructive"

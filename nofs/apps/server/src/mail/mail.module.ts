@@ -12,7 +12,10 @@ import { MailService } from './mail.service';
     MailerModule.forRootAsync({
       useFactory: async () => {
         if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-          logger.info({ user: process.env.GMAIL_USER }, 'Mail configured via Gmail');
+          logger.info(
+            { user: process.env.GMAIL_USER },
+            'Mail configured via Gmail',
+          );
           return {
             transport: {
               service: 'gmail',
@@ -22,7 +25,9 @@ import { MailService } from './mail.service';
               },
             },
             defaults: {
-              from: process.env.MAIL_FROM ?? `"NOLA Spots" <${process.env.GMAIL_USER}>`,
+              from:
+                process.env.MAIL_FROM ??
+                `"NOLA Spots" <${process.env.GMAIL_USER}>`,
             },
             template: {
               dir: join(__dirname, 'templates'), //  Correct
@@ -34,7 +39,10 @@ import { MailService } from './mail.service';
 
         const testAccount = await nodemailer.createTestAccount();
         logger.info('Mail: GMAIL_USER not set — using Ethereal test account');
-        logger.info({ user: testAccount.user, pass: testAccount.pass }, 'Ethereal credentials');
+        logger.info(
+          { user: testAccount.user, pass: testAccount.pass },
+          'Ethereal credentials',
+        );
         logger.info('View sent emails at https://ethereal.email/messages');
 
         return {

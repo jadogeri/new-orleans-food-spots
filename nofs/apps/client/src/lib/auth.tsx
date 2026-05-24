@@ -25,8 +25,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleLogout = async () => {
     try {
       await logoutMutation.mutateAsync(undefined as unknown as void);
-    } catch (e) {
-      // Ignore
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error("Logout failed:", e.message);
+      } else {
+        console.error("Logout failed with unknown error:", e);
+      }
     } finally {
       localStorage.removeItem("nola_token");
       queryClient.clear();

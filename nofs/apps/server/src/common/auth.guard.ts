@@ -13,13 +13,17 @@ export const AUTH_USER_ID_KEY = 'nestUserId';
 @Injectable()
 export class AuthGuard implements CanActivate {
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const req = ctx.switchToHttp().getRequest<Request & Record<string, unknown>>();
+    const req = ctx
+      .switchToHttp()
+      .getRequest<Request & Record<string, unknown>>();
     const token = req.headers['authorization']?.replace('Bearer ', '').trim();
 
     if (!token) throw new UnauthorizedException();
 
     try {
-      const session = await auth.api.getSession({ headers: buildHeaders(req, token) });
+      const session = await auth.api.getSession({
+        headers: buildHeaders(req, token),
+      });
       if (!session?.user?.id) throw new UnauthorizedException();
       req[AUTH_USER_ID_KEY] = session.user.id;
       return true;

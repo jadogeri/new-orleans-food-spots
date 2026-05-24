@@ -17,16 +17,24 @@ async function bootstrap() {
   const rawPort = process.env['SERVER_PORT'];
   if (!rawPort) throw new Error('SERVER_PORT environment variable is required');
   const port = Number(rawPort);
-  if (Number.isNaN(port) || port <= 0) throw new Error(`Invalid SERVER_PORT value: "${rawPort}"`);
+  if (Number.isNaN(port) || port <= 0)
+    throw new Error(`Invalid SERVER_PORT value: "${rawPort}"`);
 
-  const app = await NestFactory.create(AppModule, { logger: false, abortOnError: false });
+  const app = await NestFactory.create(AppModule, {
+    logger: false,
+    abortOnError: false,
+  });
 
   app.use(
     pinoHttp({
       logger,
       serializers: {
         req(req) {
-          return { id: req.id, method: req.method, url: req.url?.split('?')[0] };
+          return {
+            id: req.id,
+            method: req.method,
+            url: req.url?.split('?')[0],
+          };
         },
         res(res) {
           return { statusCode: res.statusCode };
@@ -44,6 +52,10 @@ async function bootstrap() {
 }
 
 bootstrap().catch((err) => {
-  process.stderr.write('[bootstrap error] ' + (err instanceof Error ? err.stack : String(err)) + '\n');
+  process.stderr.write(
+    '[bootstrap error] ' +
+      (err instanceof Error ? err.stack : String(err)) +
+      '\n',
+  );
   process.exit(1);
 });

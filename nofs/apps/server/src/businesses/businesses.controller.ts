@@ -10,7 +10,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import type { z } from 'zod';
-import { CreateBusinessBodySchema, UpdateBusinessBodySchema } from '../common/schemas';
+import {
+  CreateBusinessBodySchema,
+  UpdateBusinessBodySchema,
+} from '../common/schemas';
 import { AuthGuard } from '../common/auth.guard';
 import { CurrentUser } from '../common/current-user.decorator';
 import { lazyZodPipe } from '../common/zod-validation.pipe';
@@ -40,7 +43,8 @@ export class BusinessesController {
   @HttpCode(201)
   create(
     @CurrentUser() userId: string,
-    @Body(lazyZodPipe(() => CreateBusinessBodySchema)) body: z.infer<typeof CreateBusinessBodySchema>,
+    @Body(lazyZodPipe(() => CreateBusinessBodySchema))
+    body: z.infer<typeof CreateBusinessBodySchema>,
   ) {
     return this.businessesService.create(userId, body);
   }
@@ -49,7 +53,8 @@ export class BusinessesController {
   update(
     @CurrentUser() userId: string,
     @Param('id') id: string,
-    @Body(lazyZodPipe(() => UpdateBusinessBodySchema)) body: z.infer<typeof UpdateBusinessBodySchema>,
+    @Body(lazyZodPipe(() => UpdateBusinessBodySchema))
+    body: z.infer<typeof UpdateBusinessBodySchema>,
   ) {
     return this.businessesService.update(userId, id, body);
   }

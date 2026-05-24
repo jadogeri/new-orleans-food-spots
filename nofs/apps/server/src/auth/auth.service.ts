@@ -27,11 +27,15 @@ const SPECIAL = '!@#$%^&*';
 const ALL = UPPER + LOWER + DIGITS + SPECIAL;
 
 function generateNoLookalikesPassword(length = 12): string {
-  const rand = (chars: string) => chars[Math.floor(Math.random() * chars.length)];
+  const rand = (chars: string) =>
+    chars[Math.floor(Math.random() * chars.length)];
   const parts: string[] = [
-    rand(UPPER), rand(UPPER),
-    rand(LOWER), rand(LOWER),
-    rand(DIGITS), rand(DIGITS),
+    rand(UPPER),
+    rand(UPPER),
+    rand(LOWER),
+    rand(LOWER),
+    rand(DIGITS),
+    rand(DIGITS),
     rand(SPECIAL),
   ];
   while (parts.length < length) parts.push(rand(ALL));
@@ -43,7 +47,9 @@ function generateNoLookalikesPassword(length = 12): string {
 }
 
 function hashTempPassword(password: string, salt: string): string {
-  return createHash('sha256').update(password + salt).digest('hex');
+  return createHash('sha256')
+    .update(password + salt)
+    .digest('hex');
 }
 
 type AnyFn = (...args: unknown[]) => unknown;
@@ -60,7 +66,10 @@ async function callRequestPasswordReset(email: string): Promise<string | null> {
   return token;
 }
 
-async function callResetPassword(token: string, newPassword: string): Promise<void> {
+async function callResetPassword(
+  token: string,
+  newPassword: string,
+): Promise<void> {
   await (auth.api as Record<string, AnyFn>)['resetPassword']({
     query: { token },
     body: { newPassword },
@@ -85,7 +94,10 @@ export class AuthService {
       }
 
       // 💡 FIXED: Cast parameters to any
-      await db.update(usersTable).set({ username }).where(eq(usersTable.id as any, result.user.id) as any);
+      await db
+        .update(usersTable)
+        .set({ username })
+        .where(eq(usersTable.id as any, result.user.id) as any);
 
       this.mailService
         .sendWelcomeEmail(email, { firstName: username, email })
@@ -106,15 +118,18 @@ export class AuthService {
     const { email, password } = body;
 
     // 💡 FIXED: Cast parameters to any
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.email as any, email) as any);
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email as any, email) as any);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
     if (!user.isActive) {
       throw new ForbiddenException('Account is deactivated');
     }
 
-// 💡 FIXED: Cast string value to any to allow direct execution evaluation 
-if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
+    // 💡 FIXED: Cast string value to any to allow direct execution evaluation
+    if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
       throw new ForbiddenException(
         'Account locked after too many failed attempts. Use Forgot Password to regain access.',
       );
@@ -155,7 +170,10 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
           .set({ loginAttempts: newAttempts, lockedUntil: lockedUntil })
           .where(eq(usersTable.id as any, user.id) as any);
         this.mailService
-          .sendAccountLockedEmail(email, { firstName: user.name ?? undefined, email })
+          .sendAccountLockedEmail(email, {
+            firstName: user.name ?? undefined,
+            email,
+          })
           .catch(() => {});
       } else {
         // 💡 FIXED: Cast parameters to any
@@ -180,7 +198,9 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const session = await auth.api.getSession({ headers: buildHeaders(req, token) });
+      const session = await auth.api.getSession({
+        headers: buildHeaders(req, token),
+      });
       if (!session?.user) throw new UnauthorizedException();
 
       // 💡 FIXED: Cast column parameters to any
@@ -189,19 +209,27 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
         .from(usersTable)
         .where(eq(usersTable.id as any, session.user.id) as any);
 
-      if (dbUser && !dbUser.isActive) throw new ForbiddenException('Account is deactivated');
+      if (dbUser && !dbUser.isActive)
+        throw new ForbiddenException('Account is deactivated');
 
       const username = dbUser?.username ?? session.user.name ?? '';
       return { id: session.user.id, username, email: session.user.email };
     } catch (err: unknown) {
-      if (err instanceof UnauthorizedException || err instanceof ForbiddenException) throw err;
+      if (
+        err instanceof UnauthorizedException ||
+        err instanceof ForbiddenException
+      )
+        throw err;
       throw new UnauthorizedException();
     }
   }
 
   async forgotPassword(email: string): Promise<{ ok: boolean }> {
     // 💡 FIXED: Cast column parameters to any
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.email as any, email) as any);
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email as any, email) as any);
     if (!user) return { ok: true }; // Prevent email enumeration
 
     const tempPassword = generateNoLookalikesPassword();
@@ -212,7 +240,12 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
     // 💡 FIXED: Cast column parameters to any
     await db
       .delete(verificationsTable)
-      .where(eq(verificationsTable.identifier as any, `${NOLA_RESET_PREFIX}${user.id}`) as any);
+      .where(
+        eq(
+          verificationsTable.identifier as any,
+          `${NOLA_RESET_PREFIX}${user.id}`,
+        ) as any,
+      );
 
     // 💡 FIXED: Cast the insert target table to any
     await db.insert(verificationsTable as any).values({
@@ -222,7 +255,7 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
       expiresAt,
       createdAt: new Date(),
       updatedAt: new Date(),
-    } as any);
+    });
 
     // Ask Better Auth to issue a reset token (captured via sendResetPassword callback)
     const resetToken = await callRequestPasswordReset(email);
@@ -248,7 +281,10 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
     newPassword: string,
   ): Promise<{ ok: boolean }> {
     // 💡 FIXED: Cast column parameters to any
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.email as any, email) as any);
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email as any, email) as any);
     if (!user) throw new NotFoundException('User not found');
 
     const tempHash = hashTempPassword(currentPassword, user.id);
@@ -259,7 +295,10 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
       .from(verificationsTable)
       .where(
         and(
-          eq(verificationsTable.identifier as any, `${NOLA_RESET_PREFIX}${user.id}`),
+          eq(
+            verificationsTable.identifier as any,
+            `${NOLA_RESET_PREFIX}${user.id}`,
+          ),
           gt(verificationsTable.expiresAt as any, new Date()),
         ) as any,
       )
@@ -271,7 +310,8 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
 
     // Issue a fresh Better Auth reset token to set the new permanent password
     const resetToken = await callRequestPasswordReset(email);
-    if (!resetToken) throw new BadRequestException('Could not complete password reset');
+    if (!resetToken)
+      throw new BadRequestException('Could not complete password reset');
 
     await callResetPassword(resetToken, newPassword);
 
@@ -279,12 +319,17 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
     // 💡 FIXED: Cast column parameters to any
     await db
       .delete(verificationsTable)
-      .where(eq(verificationsTable.identifier as any, `${NOLA_RESET_PREFIX}${user.id}`) as any);
+      .where(
+        eq(
+          verificationsTable.identifier as any,
+          `${NOLA_RESET_PREFIX}${user.id}`,
+        ) as any,
+      );
 
     // 💡 FIXED: Cast column parameters to any
     await db
       .update(usersTable)
-.set({ loginAttempts: 0, lockedUntil: null, updatedAt: new Date() })
+      .set({ loginAttempts: 0, lockedUntil: null, updatedAt: new Date() })
       .where(eq(usersTable.id as any, user.id) as any);
 
     await this.mailService.sendPasswordResetEmail(email, {
@@ -297,7 +342,10 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
 
   async deactivate(userId: string): Promise<{ ok: boolean }> {
     // 💡 FIXED: Cast column parameters to any
-    const [user] = await db.select().from(usersTable).where(eq(usersTable.id as any, userId) as any);
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.id as any, userId) as any);
     if (!user) throw new NotFoundException('User not found');
 
     // 💡 FIXED: Cast column parameters to any
@@ -307,7 +355,9 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
       .where(eq(usersTable.id as any, userId) as any);
 
     // 💡 FIXED: Cast column parameters to any
-    await db.delete(sessionsTable).where(eq(sessionsTable.userId as any, userId) as any);
+    await db
+      .delete(sessionsTable)
+      .where(eq(sessionsTable.userId as any, userId) as any);
 
     await this.mailService.sendDeactivationEmail(user.email, {
       firstName: user.name ?? undefined,
