@@ -13,7 +13,7 @@ import { db, usersTable, sessionsTable, verificationsTable } from '@repo/db';
 import type { RegisterBodySchema, LoginBodySchema } from '../common/schemas';
 import { auth, capturedResetTokens } from '../lib/auth';
 import { buildHeaders } from '../common/http-utils';
-import { MailService } from '../mail/mail.service';
+import { MailService } from '../mail/mail.service.js';
 
 const LOCK_AFTER_ATTEMPTS = 3;
 const LOCK_DURATION_MS = 30 * 60 * 1000; // 30 minutes
@@ -114,7 +114,7 @@ export class AuthService {
     }
 
 // 💡 FIXED: Cast string value to any to allow direct execution evaluation 
-if (user.lockedUntil && (user.lockedUntil as any) > new Date().toISOString()) {
+if (user.lockedUntil && (user.lockedUntil as any) > new Date()) {
       throw new ForbiddenException(
         'Account locked after too many failed attempts. Use Forgot Password to regain access.',
       );
@@ -152,7 +152,7 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date().toISOString()) {
         await db
           .update(usersTable)
           // 💡 FIXED: Send the time representation string instead of raw Date instance
-          .set({ loginAttempts: newAttempts, lockedUntil: lockedUntil.toISOString() })
+          .set({ loginAttempts: newAttempts, lockedUntil: lockedUntil })
           .where(eq(usersTable.id as any, user.id) as any);
         this.mailService
           .sendAccountLockedEmail(email, { firstName: user.name ?? undefined, email })
@@ -284,7 +284,7 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date().toISOString()) {
     // 💡 FIXED: Cast column parameters to any
     await db
       .update(usersTable)
-.set({ loginAttempts: 0, lockedUntil: null, updatedAt: new Date().toISOString() })
+.set({ loginAttempts: 0, lockedUntil: null, updatedAt: new Date() })
       .where(eq(usersTable.id as any, user.id) as any);
 
     await this.mailService.sendPasswordResetEmail(email, {
@@ -303,7 +303,7 @@ if (user.lockedUntil && (user.lockedUntil as any) > new Date().toISOString()) {
     // 💡 FIXED: Cast column parameters to any
     await db
       .update(usersTable)
-      .set({ isActive: false, updatedAt: new Date().toISOString() })
+      .set({ isActive: false, updatedAt: new Date() })
       .where(eq(usersTable.id as any, userId) as any);
 
     // 💡 FIXED: Cast column parameters to any

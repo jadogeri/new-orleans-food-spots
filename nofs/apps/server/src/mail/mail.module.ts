@@ -25,7 +25,7 @@ import { MailService } from './mail.service';
               from: process.env.MAIL_FROM ?? `"NOLA Spots" <${process.env.GMAIL_USER}>`,
             },
             template: {
-              dir: join(__dirname, 'mail', 'templates'),
+              dir: join(__dirname, 'templates'), //  Correct
               adapter: new HandlebarsAdapter(),
               options: { strict: false },
             },
@@ -51,7 +51,7 @@ import { MailService } from './mail.service';
             from: `"NOLA Spots" <${testAccount.user}>`,
           },
           template: {
-            dir: join(__dirname, 'mail', 'templates'),
+            dir: join(__dirname, 'templates'), // 💡 FIXED: Changed from 'mail', 'templates' to just 'templates'
             adapter: new HandlebarsAdapter(),
             options: { strict: false },
           },

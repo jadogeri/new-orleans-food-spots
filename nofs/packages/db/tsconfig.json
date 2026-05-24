@@ -3,11 +3,12 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "./dist",         // 💡 FIXED: Forces the compiler to output files into the /dist folder
-    "rootDir": "./src",         // 💡 FIXED: Tells the compiler to look only inside /src
-    "declaration": true,        // 💡 Generates type files (.d.ts)
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
     "declarationMap": true,
     "skipLibCheck": true,
+    "composite": true,
     "types": ["node"]
   },
   "include": ["src/**/*"],

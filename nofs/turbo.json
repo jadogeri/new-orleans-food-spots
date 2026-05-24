@@ -26,6 +26,9 @@
     "db:drop": {
       "cache": false
     },
+    "db:clear": {
+      "cache": false
+    },
     "db:test": {
       "cache": false
     },

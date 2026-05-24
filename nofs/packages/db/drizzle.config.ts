@@ -1,6 +1,12 @@
 // packages/db/drizzle.config.ts
-import 'dotenv/config';
+import dotenv from "dotenv";
+dotenv.config();
 import { defineConfig } from "drizzle-kit";
+
+const url = process.env.TURSO_DATABASE_URL;
+const authToken = process.env.TURSO_AUTH_TOKEN;
+console.log("TURSO_DATABASE_URL:", url);
+console.log("TURSO_AUTH_TOKEN:", authToken);
 
 export default defineConfig({
   out: './src/migrations',
@@ -10,7 +16,8 @@ export default defineConfig({
   // schema: './src/index.ts', 
   dialect: 'turso',
   dbCredentials: {
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN,
+    url: url!,
+    authToken: authToken,
   },
 });
+

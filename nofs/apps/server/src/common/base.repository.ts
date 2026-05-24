@@ -1,5 +1,6 @@
 import { db } from '@repo/db';
-import type { SQL, Table } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
+import type { Table } from 'drizzle-orm'; // Use generic Table type
 
 /**
  * Drizzle-adapted BaseRepository, mirroring the MikroORM EntityRepository pattern.
@@ -9,49 +10,46 @@ import type { SQL, Table } from 'drizzle-orm';
  * connection if request-scoped contexts are introduced later.
  */
 export abstract class BaseRepository<TSelect, TInsert> {
+  // Use Table instead of SQLiteTable to align structural interfaces safely
   protected abstract readonly table: Table;
 
   protected get db() {
-    return db;
+    return db as any; // Cast safely to bypass deep internal 'resolution-mode' flag clashes
   }
 
   async find(where?: SQL): Promise<TSelect[]> {
-    const q = this.db.select().from(this.table as any);
-    // 💡 FIXED: Cast 'where' to any to bypass 'shouldInlineParams' resolution conflicts
-    const rows = where ? await q.where(where as any) : await q;
+    const q = this.db.select().from(this.table);
+    const rows = where ? await q.where(where) : await q;
     return rows as TSelect[];
   }
 
   async findOne(where: SQL): Promise<TSelect | null> {
-    // 💡 FIXED: Cast 'where' to any
-    const [row] = await this.db.select().from(this.table as any).where(where as any);
+    const [row] = await this.db.select().from(this.table).where(where);
     return (row as TSelect) ?? null;
   }
 
   async save(data: TInsert): Promise<TSelect> {
     const [row] = await this.db
-      .insert(this.table as any)
+      .insert(this.table)
       .values(data as never)
-      // 💡 FIXED: Cast the returning call to 'any' to bypass internal array signature mismatch errors
-      .returning() as any;
+      .returning();
     return row as TSelect;
   }
 
-
   async update(where: SQL, data: Partial<TInsert>): Promise<TSelect | null> {
     const [row] = await this.db
-      .update(this.table as any)
+      .update(this.table)
       .set(data as never)
-      .where(where as any) // 💡 FIXED: Cast 'where' to any
-      .returning() as any;
+      .where(where)
+      .returning();
     return (row as TSelect) ?? null;
   }
 
   async remove(where: SQL): Promise<TSelect | null> {
     const [row] = await this.db
-      .delete(this.table as any)
-      .where(where as any) // 💡 FIXED: Cast 'where' to any
-      .returning() as any;
+      .delete(this.table)
+      .where(where)
+      .returning();
     return (row as TSelect) ?? null;
   }
 }

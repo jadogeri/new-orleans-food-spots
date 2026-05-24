@@ -1,13 +1,12 @@
-import { sql } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { usersTable } from "./users.js";
 
 export const sessionsTable = sqliteTable("sessions", {
   id: text("id").primaryKey(),
-  expiresAt: text("expires_at").notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   token: text("token").notNull().unique(),
-  createdAt: text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text("updated_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),

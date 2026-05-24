@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",    
+    "rootDir": "./src", // 👈 FIX: Changed from "src" to "./src"
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "isolatedModules": false,
+    "strictPropertyInitialization": false,
+    "types": ["node"]
+  },
+  "include": ["src/**/*"], // 👈 FIX: Matches all source subdirectories cleanly
+  "exclude": ["node_modules", "dist"]
+}
