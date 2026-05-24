@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to NOLA Spots</title>
+</head>
+<body style="margin:0;padding:0;background-color:#1a0f00;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#1a0f00;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+          <!-- Header -->
+          <tr>
+            <td align="center" style="padding:0 0 32px 0;">
+              <div style="font-size:28px;font-weight:700;color:#C9A84C;letter-spacing:2px;">🎷 NOLA Spots</div>
+              <div style="height:2px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin-top:12px;"></div>
+            </td>
+          </tr>
+          <!-- Card -->
+          <tr>
+            <td style="background-color:#2a1a05;border-radius:12px;border:1px solid #3d2a0a;padding:40px 36px;">
+              <h1 style="color:#C9A84C;font-size:24px;margin:0 0 16px 0;font-weight:700;">
+                Welcome to NOLA Spots{{#if firstName}}, {{firstName}}{{/if}}!
+              </h1>
+              <p style="color:#f0e6d0;font-size:16px;line-height:1.7;margin:0 0 24px 0;">
+                Your account has been created. You're now ready to discover, save, and remember
+                the finest food spots in the Crescent City — from po-boys on Magazine Street to
+                gumbo in the French Quarter.
+              </p>
+              <table cellpadding="0" cellspacing="0" style="margin:0 0 28px 0;">
+                <tr>
+                  <td style="background-color:#C9A84C;border-radius:6px;padding:14px 28px;">
+                    <a href="{{logoUrl}}" style="color:#1a0f00;font-weight:700;font-size:15px;text-decoration:none;display:block;">
+                      Explore Food Spots →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="color:#a09070;font-size:14px;line-height:1.6;margin:0;">
+                If you did not create this account, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:28px 0 0 0;">
+              <p style="color:#6b5230;font-size:13px;margin:0;">
+                © {{year}} {{company}} · New Orleans, Louisiana
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
