@@ -21,7 +21,6 @@ Select all that apply:
 
 - [ ] `apps/client` (React Frontend)
 - [ ] `apps/server` (NestJSs backend)
-- [ ] `packages/api-zod` (NestJS Backend Layer)
 - [ ] `packages/api-client-react` (Custom hook / API)
 - [ ] `packages/api-spec` (Orval/ Type generation)
 - [ ] `packages/api-zod` (ZOD / Type definitions)
