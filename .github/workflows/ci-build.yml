@@ -1,0 +1,96 @@
+name: CI — Build
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'nofs/**'
+      - '.github/workflows/ci-build.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'nofs/**'
+      - '.github/workflows/ci-build.yml'
+
+defaults:
+  run:
+    working-directory: nofs
+
+jobs:
+  build:
+    name: Build all packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: nofs/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm --filter @repo/db run build
+
+      - name: Build server
+        run: pnpm --filter server run build
+        env:
+          SESSION_SECRET: ci-build-secret
+          TURSO_DATABASE_URL: file:./ci-build.db
+
+      - name: Build client
+        run: pnpm --filter client run build
+        env:
+          CLIENT_PORT: 5000
+          SERVER_PORT: 3000
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-dist
+          path: nofs/apps/server/dist/
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: client-dist
+          path: nofs/apps/client/dist/
+          retention-days: 7
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: nofs/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace packages
+        run: pnpm --filter @repo/db run build
+
+      - name: Lint server
+        run: pnpm --filter server run lint
+        continue-on-error: true
+
+      - name: Lint client
+        run: pnpm --filter client run lint
+        continue-on-error: true

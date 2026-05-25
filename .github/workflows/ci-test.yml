@@ -1,0 +1,114 @@
+name: CI — Tests
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'nofs/**'
+      - '.github/workflows/ci-test.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'nofs/**'
+      - '.github/workflows/ci-test.yml'
+
+defaults:
+  run:
+    working-directory: nofs
+
+jobs:
+  test-server:
+    name: Server unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: nofs/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace packages
+        run: pnpm --filter @repo/db run build
+
+      - name: Run server tests
+        run: pnpm --filter server run test
+        env:
+          SESSION_SECRET: ci-test-secret
+          TURSO_DATABASE_URL: file:./ci-test.db
+
+      - name: Server test coverage
+        run: pnpm --filter server run test:coverage
+        env:
+          SESSION_SECRET: ci-test-secret
+          TURSO_DATABASE_URL: file:./ci-test.db
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: server-coverage
+          path: nofs/apps/server/coverage/
+
+  test-client:
+    name: Client unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: nofs/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run client tests
+        run: pnpm --filter client run test
+
+      - name: Client test coverage
+        run: pnpm --filter client run test:coverage
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: client-coverage
+          path: nofs/apps/client/coverage/
+
+  test-db:
+    name: DB package tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.26.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: nofs/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run DB package tests
+        run: pnpm --filter @repo/db run test
