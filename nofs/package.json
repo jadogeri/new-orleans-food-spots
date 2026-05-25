@@ -18,7 +18,11 @@
     "db:studio": "pnpm --filter @repo/db run db:studio",
     "db:drop": "pnpm --filter @repo/db run db:drop",
     "db:clear": "pnpm --filter @repo/db run db:clear",
-    "codegen": "turbo run codegen"
+    "codegen": "turbo run codegen",
+    "test:client": "pnpm --filter client run test",
+    "test:server": "pnpm --filter server run test",
+    "client:test:coverage": "pnpm --filter client run test:coverage",
+    "server:test:coverage": "pnpm --filter server run test:coverage"
   },
   "devDependencies": {
     "@rollup/rollup-win32-x64-msvc": "^4.60.4",
@@ -28,7 +32,7 @@
     "turbo": "^2.9.14",
     "typescript": "5.9.2"
   },
-  "packageManager": "pnpm@11.0.0",
+  "packageManager": "pnpm@10.26.1",
   "engines": {
     "node": ">=18"
   }

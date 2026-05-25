@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { Mail, ArrowLeft, CheckCircle, KeyRound } from "lucide-react";
+import { useForgotPassword } from "@repo/api-client-react";
+import { useToast } from "@/hooks/use-toast";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -24,16 +26,28 @@ type FormValues = z.infer<typeof schema>;
 
 export default function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const forgotPasswordMutation = useForgotPassword();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: "" },
   });
 
-  const onSubmit = async (_values: FormValues) => {
-    // Simulate network delay
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitted(true);
+  const onSubmit = async (values: FormValues) => {
+    try {
+      await forgotPasswordMutation.mutateAsync({ data: { email: values.email } });
+      setSubmittedEmail(values.email);
+      setSubmitted(true);
+    } catch {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -58,13 +72,31 @@ export default function ForgotPassword() {
               <CheckCircle className="w-8 h-8 text-primary" />
             </div>
             <h2 className="text-2xl font-serif font-bold text-white mb-3">Check your inbox</h2>
-            <p className="text-muted-foreground mb-6">
-              If <span className="text-white font-medium">{form.getValues("email")}</span> is
-              registered, you'll receive password reset instructions shortly.
+            <p className="text-muted-foreground mb-2">
+              If <span className="text-white font-medium">{submittedEmail}</span> is
+              registered, you'll receive a temporary password shortly.
             </p>
-            <Link href="/login">
-              <Button className="w-full h-11">Back to Sign In</Button>
-            </Link>
+            <p className="text-muted-foreground text-sm mb-8">
+              Use that temporary password on the Reset Password page to set a new permanent password.
+            </p>
+            <div className="w-full space-y-3">
+              <Button
+                className="w-full h-11 gap-2"
+                onClick={() =>
+                  setLocation(
+                    `/reset-password?email=${encodeURIComponent(submittedEmail)}`,
+                  )
+                }
+              >
+                <KeyRound className="w-4 h-4" />
+                Reset Password
+              </Button>
+              <Link href="/login">
+                <Button variant="outline" className="w-full h-11 border-white/10 text-white/70 hover:text-white hover:bg-white/5">
+                  Back to Sign In
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         ) : (
           <>
@@ -74,7 +106,7 @@ export default function ForgotPassword() {
               </div>
               <h2 className="text-3xl font-serif font-bold text-white text-center">Forgot password?</h2>
               <p className="text-muted-foreground mt-2 text-center text-sm">
-                Enter your email and we'll send you reset instructions.
+                Enter your email and we'll send you a temporary password.
               </p>
             </div>
 
@@ -100,20 +132,28 @@ export default function ForgotPassword() {
                 <Button
                   type="submit"
                   className="w-full h-11 text-base font-medium"
-                  disabled={form.formState.isSubmitting}
+                  disabled={forgotPasswordMutation.isPending}
                 >
-                  {form.formState.isSubmitting ? "Sending..." : "Send reset link"}
+                  {forgotPasswordMutation.isPending ? "Sending..." : "Send temporary password"}
                 </Button>
               </form>
             </Form>
 
-            <div className="mt-5 text-center">
+            <div className="mt-5 text-center space-y-3">
               <Link href="/login">
                 <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-white transition-colors cursor-pointer">
                   <ArrowLeft className="w-4 h-4" />
                   Back to Sign In
                 </span>
               </Link>
+              <div>
+                <Link href="/reset-password">
+                  <span className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline cursor-pointer font-medium">
+                    <KeyRound className="w-4 h-4" />
+                    Already have a temporary password?
+                  </span>
+                </Link>
+              </div>
             </div>
           </>
         )}
