@@ -40,7 +40,7 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["^codegen"],
+      "dependsOn": ["^codegen", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", "*.tsbuildinfo", ".next/**"]
     },
