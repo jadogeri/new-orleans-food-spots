@@ -15,9 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { UtensilsCrossed } from "lucide-react";
+import { Eye, EyeOff, UtensilsCrossed } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -27,6 +28,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function Login() {
+  const [showTemp, setShowTemp] = useState(false);  
   const { setToken } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
@@ -127,7 +129,7 @@ export default function Login() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white/80">Password</FormLabel>
-                  <FormControl>
+                  {/* <FormControl>
                     <Input 
                       type="password" 
                       placeholder="••••••••" 
@@ -135,7 +137,28 @@ export default function Login() {
                       className="bg-white/5 border-white/10 text-white focus-visible:ring-primary"
                       data-testid="input-login-password"
                     />
-                  </FormControl>
+                  </FormControl> */}
+                                       <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showTemp ? "text" : "password"}
+                            placeholder="Enter the code from your email"
+                            {...field}
+                            className="bg-white/5 border-white/10 text-white focus-visible:ring-primary pr-10 font-mono"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowTemp((v) => !v)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white transition-colors"
+                          >
+                            {showTemp ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
                   <FormMessage className="text-destructive" />
                 </FormItem>
               )}
