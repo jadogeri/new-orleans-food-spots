@@ -1,6 +1,8 @@
 # 🎷 NOLA Spots
 
-**Version:** 2.0.0 &nbsp;|&nbsp; **Author:** Joseph Adogeri &nbsp;|&nbsp; **Date:** May 2026
+**Version:** 2.0.0 <br/>
+**Author:** Joseph Adogeri <br/>
+ **Date:** May 2026
 
 > Discover, save, and remember the finest food spots in New Orleans — powered by the Yelp Fusion API, Better Auth, and NestJS.
 
