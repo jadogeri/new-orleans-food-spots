@@ -7,6 +7,7 @@ import { MailService } from '../mail/mail.service';
 // Module-level mocks — must come before any imports that use these modules
 // ---------------------------------------------------------------------------
 
+
 jest.mock('@repo/db', () => ({
   db: {
     select: jest.fn().mockReturnThis(),

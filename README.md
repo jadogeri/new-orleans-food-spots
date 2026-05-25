@@ -277,10 +277,10 @@ cd nola-spots
 pnpm install
 
 # 3. Push the database schema
-pnpm --filter @workspace/db run push
+pnpm --filter @repo/db run push
 
 # 4. Regenerate API types (optional, already committed)
-pnpm --filter @workspace/api-spec run codegen
+pnpm --filter @repo/api-spec run codegen
 ```
 
 ---
@@ -315,10 +315,10 @@ Create environment variables (or set them in your hosting provider's secrets man
 
 ```bash
 # Start the API server (builds first, then runs)
-pnpm --filter @workspace/api-server run dev
+pnpm --filter @repo/api-server run dev
 
 # Start the React frontend
-pnpm --filter @workspace/nola-food run dev
+pnpm --filter @repo/nola-food run dev
 
 # Full typecheck (all workspace packages)
 pnpm run typecheck
@@ -388,8 +388,8 @@ User → POST /api/auth/reset-password { email, currentPassword, newPassword }
 |---|-----|-----------|-----|
 | 1 | NestJS decorators (`@Injectable`, `@Controller`) broken at runtime | esbuild's built-in TypeScript loader ignores `emitDecoratorMetadata` | Replaced TS loader with SWC plugin in `build.mjs` — SWC handles `legacyDecorator` + `decoratorMetadata` correctly |
 | 2 | `@nestjs/microservices` / `@nestjs/websockets` import errors on startup | NestJS lazy-requires these packages even when not used | Added them to esbuild `external` list so they resolve from `node_modules` at runtime (uninstalled = graceful skip) |
-| 3 | `GET /api/healthz` returning 500 | Zod import from `@workspace/api-zod` caused a runtime error after bundling due to ESM/CJS mismatch | Simplified health controller to return plain `{ status: 'ok' }` object; Zod validation belongs on request bodies, not static responses |
-| 4 | `ts-node` failing to start dev server | ESM workspace libraries (`@workspace/db`, `@workspace/api-zod` use `"type":"module"`) are incompatible with CJS ts-node | Removed ts-node from the dev flow entirely; dev script = `build.mjs` + `node dist/main.js` |
+| 3 | `GET /api/healthz` returning 500 | Zod import from `@repo/api-zod` caused a runtime error after bundling due to ESM/CJS mismatch | Simplified health controller to return plain `{ status: 'ok' }` object; Zod validation belongs on request bodies, not static responses |
+| 4 | `ts-node` failing to start dev server | ESM workspace libraries (`@repo/db`, `@repo/api-zod` use `"type":"module"`) are incompatible with CJS ts-node | Removed ts-node from the dev flow entirely; dev script = `build.mjs` + `node dist/main.js` |
 | 5 | Handlebars templates not found after bundling | esbuild bundles all `.ts` into `dist/main.js`; `__dirname` in bundled code = `dist/`, not `src/` | Added a `copyTemplates()` step to `build.mjs` that copies `src/mail/templates/` → `dist/mail/templates/` after every build |
 | 6 | `oslo` (Better Auth's password library) missing at runtime | Listed as an esbuild-bundled module but it is ESM-only, causing CJS conversion issues | Added `oslo` to esbuild `external` list; it resolves from `node_modules` (installed as a transitive dep of `better-auth`) |
 | 7 | Account lockout counter not decrementing on success | `loginAttempts` was only incremented on failure but never reset | Reset `loginAttempts` and `lockedUntil` to `0 / null` on every successful `signInEmail` call |

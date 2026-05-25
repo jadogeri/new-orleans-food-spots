@@ -36,7 +36,7 @@ Verify the NestJS API server is running (`GET /api/healthz` should return `{"sta
 Run the codegen step to regenerate Zod schemas and React Query hooks:
 
 ```bash
-pnpm --filter @workspace/api-spec run codegen
+pnpm --filter @repo/api-spec run codegen
 ```
 
 Then run `pnpm run typecheck` to confirm everything compiles.
@@ -46,7 +46,7 @@ Then run `pnpm run typecheck` to confirm everything compiles.
 Push the latest Drizzle schema:
 
 ```bash
-pnpm --filter @workspace/db run push
+pnpm --filter @repo/db run push
 ```
 
 > This command is safe for development. For production, review the generated SQL before applying.

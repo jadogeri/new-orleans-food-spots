@@ -36,12 +36,12 @@ This project follows our [Code of Conduct](./CODE_OF_CONDUCT.md). By participati
    ```
 4. Push the database schema:
    ```bash
-   pnpm --filter @workspace/db run push
+   pnpm --filter @repo/db run push
    ```
 5. Start the dev servers:
    ```bash
-   pnpm --filter @workspace/api-server run dev
-   pnpm --filter @workspace/nola-food run dev
+   pnpm --filter @repo/api-server run dev
+   pnpm --filter @repo/nola-food run dev
    ```
 
 ---
@@ -51,8 +51,8 @@ This project follows our [Code of Conduct](./CODE_OF_CONDUCT.md). By participati
 | Command | Purpose |
 |---------|---------|
 | `pnpm run typecheck` | Full typecheck across all workspace packages |
-| `pnpm --filter @workspace/api-spec run codegen` | Regenerate Zod schemas + React Query hooks from OpenAPI spec |
-| `pnpm --filter @workspace/db run push` | Push Drizzle schema changes to the dev database |
+| `pnpm --filter @repo/api-spec run codegen` | Regenerate Zod schemas + React Query hooks from OpenAPI spec |
+| `pnpm --filter @repo/db run push` | Push Drizzle schema changes to the dev database |
 | `pnpm run build` | Build all packages |
 
 Always run `pnpm run typecheck` before opening a pull request.
