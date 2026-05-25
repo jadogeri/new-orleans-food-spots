@@ -92,7 +92,11 @@ export default function Home() {
               size="sm"
               variant={selectedCategory === undefined ? "default" : "outline"}
               onClick={() => setSelectedCategory(undefined)}
-              className="rounded-full bg-white/5 border-white/10 hover:bg-white/10 hover:text-white text-xs h-7 px-3"
+              className={`rounded-full bg-white/5 border-white/10 hover:bg-white/10 hover:text-white text-xs h-7 px-3 ${
+                  selectedCategory === undefined
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    : "bg-white/5 hover:bg-white/10 hover:text-white text-muted-foreground"
+                }`}
             >
               All
             </Button>
