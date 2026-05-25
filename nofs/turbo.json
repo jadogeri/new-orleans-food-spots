@@ -12,7 +12,11 @@
       "cache": false
     },
     "codegen": {
-      "cache": false
+      "cache": false,
+      "outputs": [
+        "lib/api-zod/**",
+        "lib/api-client-react/**"
+      ]
     },
     "db:generate": {
       "cache": false
