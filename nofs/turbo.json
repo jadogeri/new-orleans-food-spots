@@ -14,8 +14,8 @@
     "codegen": {
       "cache": false,
       "outputs": [
-        "lib/api-zod/**",
-        "lib/api-client-react/**"
+        "../../lib/api-zod/**",
+        "../../lib/api-client-react/**"
       ]
     },
     "db:generate": {
@@ -42,7 +42,7 @@
     "build": {
       "dependsOn": ["^codegen", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", "*.tsbuildinfo", ".next/**"]
+      "outputs": ["dist/**", "build/**", "*.tsbuildinfo", ".next/**"]
     },
     "typecheck": {
       "dependsOn": ["^codegen"],
