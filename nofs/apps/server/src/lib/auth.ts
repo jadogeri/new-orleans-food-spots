@@ -34,10 +34,8 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:5000',
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async (data: {
-      url: string;
-      user: { email: string };
-    }) => {
+    // eslint-disable-next-line @typescript-eslint/require-await
+    sendResetPassword: async (data: { url: string; user: { email: string } }) => {
       // Extract the reset token from the URL (.../reset-password/<token>?...)
       const match = (data.url ?? '').match(/reset-password\/([^?]+)/);
       if (match?.[1]) {

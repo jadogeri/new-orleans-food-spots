@@ -1,6 +1,5 @@
 // 💡 STEP 1: Put environment setup imports at the ABSOLUTE top of the file
 import * as dotenv from 'dotenv';
-import path from 'path';
 
 // 💡 STEP 2: Execute config mapping BEFORE loading any app frameworks or module structures
 dotenv.config();

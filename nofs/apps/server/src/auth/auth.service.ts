@@ -5,7 +5,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { and, desc, eq, gt } from 'drizzle-orm';
+import { and, eq, gt } from 'drizzle-orm';
 import { createHash, randomUUID } from 'node:crypto';
 import type { Request } from 'express';
 import type { z } from 'zod';
@@ -60,7 +60,9 @@ async function callRequestPasswordReset(email: string): Promise<string | null> {
       body: { email, redirectTo: process.env.APP_URL ?? 'http://localhost' },
       headers: {},
     });
-  } catch (_) {}
+  } catch {
+    /* intentionally swallowed — token captured via callback */
+  }
   const token = capturedResetTokens.get(email) ?? null;
   capturedResetTokens.delete(email);
   return token;
@@ -189,7 +191,9 @@ export class AuthService {
   async logout(req: Request) {
     try {
       await auth.api.signOut({ headers: buildHeaders(req) });
-    } catch (_) {}
+    } catch {
+      /* intentionally swallowed */
+    }
     return { ok: true };
   }
 
@@ -262,7 +266,9 @@ export class AuthService {
     if (resetToken) {
       try {
         await callResetPassword(resetToken, tempPassword);
-      } catch (_) {}
+      } catch {
+        /* intentionally swallowed */
+      }
     }
 
     await this.mailService.sendForgotPasswordEmail(email, {
