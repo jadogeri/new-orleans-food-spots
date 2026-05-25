@@ -45,6 +45,36 @@ export const LoginResponse = zod.object({
 
 
 /**
+ * @summary Request a temporary password via email
+ */
+export const ForgotPasswordBody = zod.object({
+  "email": zod.string().email()
+})
+
+export const ForgotPasswordResponse = zod.object({
+  "ok": zod.boolean()
+})
+
+
+/**
+ * @summary Reset password using the temporary password from email
+ */
+export const resetPasswordBodyNewPasswordMin = 8;
+
+
+
+export const ResetPasswordBody = zod.object({
+  "email": zod.string().email(),
+  "currentPassword": zod.string(),
+  "newPassword": zod.string().min(resetPasswordBodyNewPasswordMin)
+})
+
+export const ResetPasswordResponse = zod.object({
+  "ok": zod.boolean()
+})
+
+
+/**
  * @summary Get current user
  */
 export const GetMeResponse = zod.object({

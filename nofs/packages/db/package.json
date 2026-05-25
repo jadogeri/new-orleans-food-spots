@@ -23,7 +23,9 @@
     "db:drop": "tsx node_modules/drizzle-kit/bin.cjs drop --config=drizzle.config.ts",
     "db:clear": "tsx src/clear-db.ts",
     "db:test": "tsx src/test-db.ts",
-    "pnpm:approve-builds": "pnpm approve-builds"
+    "pnpm:approve-builds": "pnpm approve-builds",
+    "test": "jest --config jest.config.cjs",
+    "test:coverage": "jest --config jest.config.cjs --coverage"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
@@ -34,8 +36,14 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@types/jest": "^30.0.0",
     "@types/node": "catalog:",
+    "babel-jest": "^30.4.1",
     "drizzle-kit": "^0.30.5",
+    "jest": "^30.4.2",
     "tsx": "catalog:"
   }
 }

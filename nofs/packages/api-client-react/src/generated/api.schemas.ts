@@ -5,6 +5,21 @@
  * New Orleans Food Spots API
  * OpenAPI spec version: 0.1.0
  */
+export interface OkResponse {
+  ok: boolean;
+}
+
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ResetPasswordInput {
+  email: string;
+  currentPassword: string;
+  /** @minLength 8 */
+  newPassword: string;
+}
+
 export interface HealthStatus {
   status: string;
 }
