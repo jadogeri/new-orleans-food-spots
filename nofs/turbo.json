@@ -42,7 +42,12 @@
     "build": {
       "dependsOn": ["^codegen", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", "build/**", "*.tsbuildinfo", ".next/**"]
+      "outputs": [
+        "dist/**", 
+        "build/**", 
+        "../../apps/client/dist/**",
+        "*.tsbuildinfo"
+      ]
     },
     "typecheck": {
       "dependsOn": ["^codegen"],
