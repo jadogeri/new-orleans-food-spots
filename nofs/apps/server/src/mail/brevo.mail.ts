@@ -35,12 +35,18 @@ export async function getBrevoMailConfig(): Promise<MailerOptions> {
           }
 
           // 2. Format recipients to match Brevo's exact array JSON schema
+          // 🚀 FIXED: Conditionally builds object so an empty 'name' string is never sent to Brevo
           const toField = Array.isArray(envelope.to)
-            ? envelope.to.map((r: any) => ({ email: r.address || r, name: r.name || '' }))
-            : [{ email: envelope.to?.address || envelope.to, name: envelope.to?.name || '' }];
+            ? envelope.to.map((r: any) => {
+                const emailStr = r.address || r;
+                return r.name ? { email: emailStr, name: r.name } : { email: emailStr };
+              })
+            : (() => {
+                const emailStr = envelope.to?.address || envelope.to;
+                return envelope.to?.name ? [{ email: emailStr, name: envelope.to.name }] : [{ email: emailStr }];
+              })();
 
           // 3. Send over Port 443 (Safe from Render's firewall blocks)
-          // 🔥 FIXED: Swapped 'https://brevo.com' for the actual transactional API route
           const response = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
