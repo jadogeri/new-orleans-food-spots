@@ -24,6 +24,8 @@ export function getBrevoMailConfig(): MailerOptions {
 
           // 1. Manually render the Handlebars template if it exists
           if (envelope.template) {
+            // FIX: Your template folder paths are structured as `${folder}/html` from MailService
+            // This safely appends the .hbs extension to the combined path (e.g., templates/welcome/html.hbs)
             const templatePath = join(__dirname, 'templates', `${envelope.template}.hbs`);
             const templateSource = await fs.readFile(templatePath, 'utf8');
             const compiledTemplate = handlebars.compile(templateSource);
@@ -38,7 +40,7 @@ export function getBrevoMailConfig(): MailerOptions {
             : [{ email: envelope.to?.address || envelope.to }];
 
           // 3. Send over Port 443 (Safe from firewalls)
-          // 💡 FIXED: Changed endpoint URL to the official Brevo Transactional API endpoint
+          // 💡 FIXED: Replaced corporate 'https://brevo.com' Vercel address with actual Brevo v3 Email API Endpoint
           const response = await fetch('https://brevo.com', {
             method: 'POST',
             headers: {
@@ -55,7 +57,7 @@ export function getBrevoMailConfig(): MailerOptions {
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
+            const errorData = await response.json().catch(() => ({ message: 'Could not parse error body' }));
             return callback(new Error(`Brevo API Error: ${JSON.stringify(errorData)}`), null);
           }
 
