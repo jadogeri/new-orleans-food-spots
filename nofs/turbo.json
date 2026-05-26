@@ -59,7 +59,10 @@
         "VITE_API_URL",
         "SESSION_SECRET",
         "BETTER_AUTH_URL",
-        "YELP_API_KEY"       
+        "YELP_API_KEY",
+        "NODE_ENV",       
+        "GMAIL_USER",
+        "GMAIL_APP_PASSWORD"
       ]
     },
     "start": {
