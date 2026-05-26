@@ -29,7 +29,7 @@ Ensure `GMAIL_APP_PASSWORD` is a **Gmail App Password** (generated under Google 
 
 #### The frontend cannot connect to the API
 
-Verify the NestJS API server is running (`GET /api/healthz` should return `{"status":"ok"}`). All traffic is routed through the shared reverse proxy on port 80 — do not call `localhost:8080` directly from frontend code.
+Verify the NestJS API server is running (`GET /api/health` should return `{"status":"ok"}`). All traffic is routed through the shared reverse proxy on port 80 — do not call `localhost:8080` directly from frontend code.
 
 #### TypeScript errors after changing the OpenAPI spec
 
