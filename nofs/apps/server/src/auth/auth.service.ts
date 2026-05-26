@@ -57,7 +57,7 @@ type AnyFn = (...args: unknown[]) => unknown;
 async function callRequestPasswordReset(email: string): Promise<string | null> {
   try {
     await (auth.api as Record<string, AnyFn>)['requestPasswordReset']({
-      body: { email, redirectTo: process.env.APP_URL ?? 'http://localhost' },
+      body: { email, redirectTo: process.env.FRONTEND_URL ?? 'http://localhost' },
       headers: {},
     });
   } catch {

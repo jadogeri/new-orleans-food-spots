@@ -24,7 +24,7 @@ export class MailService {
     return {
       company: 'NOLA Spots',
       year: new Date().getFullYear(),
-      logoUrl: process.env.APP_URL ?? 'https://nolaspot.app',
+      logoUrl: process.env.FRONTEND_URL ?? 'https://nolaspot.app',
     };
   }
 

@@ -302,7 +302,7 @@ Create environment variables (or set them in your hosting provider's secrets man
 | `YELP_API_KEY` | ✅ | Yelp Fusion API key |
 | `GMAIL_USER` | ✅ | Gmail address used to send emails |
 | `GMAIL_APP_PASSWORD` | ✅ | Gmail App Password (not your login password) |
-| `APP_URL` | ☑ | Public URL of the app (used in email links) |
+| `FRONTEND_URL` | ☑ | Public URL of the app (used in email links) |
 | `MAIL_FROM` | ☑ | Custom sender string, e.g. `"NOLA Spots" <noreply@example.com>` |
 | `BETTER_AUTH_URL` | ☑ | Base URL for Better Auth (defaults to localhost) |
 
