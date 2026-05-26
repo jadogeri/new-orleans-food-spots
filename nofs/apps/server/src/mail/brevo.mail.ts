@@ -18,16 +18,13 @@ export async function getBrevoMailConfig(): Promise<MailerOptions> {
         try {
           const envelope = mail.data as any;
           const apiKey = process.env.BREVO_API_KEY || '';
-          const senderEmail = process.env.BREVO_SENDER_EMAIL || '';
+          const senderEmail = process.env.BREVO_SENDER_EMAIL || 'hello@josephadogeridev.com'; // Default fallback to your new domain
+          
           logger.info({ to: envelope.to }, 'Preparing to send email via Brevo API');
-          logger.info({ apiKey: !!apiKey, senderEmail: !!senderEmail }, 'Brevo API credentials presence');
-          logger.info({ template: envelope.template }, 'Email template being used');
-          logger.info({ contextKeys: Object.keys(envelope.context || {}) }, 'Email template context keys');
-          logger.info({ data: envelope }, 'Full email data object');
 
           let htmlContent = '';
 
-          // 1. Manually render the Handlebars template if it exists
+          // 1. Render the Handlebars template if specified
           if (envelope.template) {
             const templatePath = join(__dirname, 'templates', `${envelope.template}.hbs`);
             const templateSource = await fs.readFile(templatePath, 'utf8');
@@ -37,20 +34,20 @@ export async function getBrevoMailConfig(): Promise<MailerOptions> {
             htmlContent = envelope.html || envelope.text || '';
           }
 
-          // 2. Clean recipient formatting down to strings
+          // 2. Format recipients to match Brevo's exact array JSON schema
           const toField = Array.isArray(envelope.to)
-            ? envelope.to.map((r: any) => ({ email: r.address || r }))
-            : [{ email: envelope.to?.address || envelope.to }];
+            ? envelope.to.map((r: any) => ({ email: r.address || r, name: r.name || '' }))
+            : [{ email: envelope.to?.address || envelope.to, name: envelope.to?.name || '' }];
 
-          // 3. Send over Port 443 (Safe from firewalls)
-          // 🚀 CRITICAL FIX: Changed from 'https://brevo.com' to the actual Brevo API Endpoint
-          const response = await fetch('https://brevo.com', {
+          // 3. Send over Port 443 (Safe from Render's firewall blocks)
+          // 🔥 FIXED: Swapped 'https://brevo.com' for the actual transactional API route
+          const response = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
               'accept': 'application/json',
               'api-key': apiKey,
               'content-type': 'application/json',
-            } as Record<string, string>, 
+            }, 
             body: JSON.stringify({
               sender: { name: 'NOLA Spots', email: senderEmail },
               to: toField,
