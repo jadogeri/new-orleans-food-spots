@@ -18,7 +18,6 @@ import { MailService } from './mail.service';
           );
           return {
             transport: {
-              service: 'gmail',
               host: 'smtp.gmail.com',
               port: 587,
               secure: false,
@@ -34,7 +33,7 @@ import { MailService } from './mail.service';
                 `"NOLA Spots" <${process.env.GMAIL_USER}>`,
             },
             template: {
-              dir: join(__dirname, 'templates'), //  Correct
+              dir: join(__dirname, 'templates'),
               adapter: new HandlebarsAdapter(),
               options: { strict: false },
             },
@@ -51,10 +50,9 @@ import { MailService } from './mail.service';
 
         return {
           transport: {
-           host: 'smtp.gmail.com',
-           port: 587,
-           secure: false,
-           family: 4,
+            host: 'smtp.ethereal.email',
+            port: 587,
+            secure: false,
             auth: {
               user: testAccount.user,
               pass: testAccount.pass,
