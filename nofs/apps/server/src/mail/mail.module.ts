@@ -19,6 +19,10 @@ import { MailService } from './mail.service';
           return {
             transport: {
               service: 'gmail',
+              host: 'smtp.gmail.com',
+              port: 587,
+              secure: false,
+              family: 4,
               auth: {
                 user: process.env.GMAIL_USER,
                 pass: process.env.GMAIL_APP_PASSWORD,
@@ -47,9 +51,10 @@ import { MailService } from './mail.service';
 
         return {
           transport: {
-            host: 'smtp.ethereal.email',
-            port: 587,
-            secure: false,
+           host: 'smtp.gmail.com',
+           port: 587,
+           secure: false,
+           family: 4,
             auth: {
               user: testAccount.user,
               pass: testAccount.pass,

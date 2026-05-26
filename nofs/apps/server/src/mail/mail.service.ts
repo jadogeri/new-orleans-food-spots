@@ -35,7 +35,6 @@ export class MailService {
   ): Promise<void> {
     const subjectPath = path.join(
       __dirname,
-      'mail',
       'templates',
       folder,
       'subject.hbs',
