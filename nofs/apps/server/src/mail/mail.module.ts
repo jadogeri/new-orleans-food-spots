@@ -13,7 +13,8 @@ import { getBrevoMailConfig } from './brevo.mail';
         // If production uses Google and other environments use Ethereal, 
         // your getGoogleMailConfig function already handles this fallback logic.
         if (process.env.BREVO_API_KEY && process.env.BREVO_SENDER_EMAIL) {
-            return getBrevoMailConfig();
+            // return getBrevoMailConfig();
+            return await getGoogleMailConfig(); // Temporarily using Google Mail for testing, switch to Brevo when ready
           }
 
           return await getGoogleMailConfig();
