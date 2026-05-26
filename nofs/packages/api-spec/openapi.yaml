@@ -17,7 +17,7 @@ tags:
     description: Yelp search proxy
 
 paths:
-  /healthz:
+  /health:
     get:
       operationId: healthCheck
       tags: [health]
