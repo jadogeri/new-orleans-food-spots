@@ -3,6 +3,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { MailService } from './mail.service';
 import { getBrevoMailConfig } from './brevo.mail';
 import { getGoogleMailConfig } from './google.mail';
+// 🚀 FIXED: Added the missing logger import line below
+import { logger } from '../lib/logger'; 
 
 @Global()
 @Module({
