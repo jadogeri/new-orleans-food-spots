@@ -4,7 +4,6 @@ import * as fs from 'node:fs/promises';
 import * as handlebars from 'handlebars';
 import { logger } from '../lib/logger';
 
-// FIXED: Converted to an async function returning Promise<MailerOptions>
 export async function getBrevoMailConfig(): Promise<MailerOptions> {
   logger.info(
     { from: process.env.BREVO_SENDER_EMAIL },
@@ -20,6 +19,11 @@ export async function getBrevoMailConfig(): Promise<MailerOptions> {
           const envelope = mail.data as any;
           const apiKey = process.env.BREVO_API_KEY || '';
           const senderEmail = process.env.BREVO_SENDER_EMAIL || '';
+          logger.info({ to: envelope.to }, 'Preparing to send email via Brevo API');
+          logger.info({ apiKey: !!apiKey, senderEmail: !!senderEmail }, 'Brevo API credentials presence');
+          logger.info({ template: envelope.template }, 'Email template being used');
+          logger.info({ contextKeys: Object.keys(envelope.context || {}) }, 'Email template context keys');
+          logger.info({ data: envelope }, 'Full email data object');
 
           let htmlContent = '';
 
@@ -39,7 +43,7 @@ export async function getBrevoMailConfig(): Promise<MailerOptions> {
             : [{ email: envelope.to?.address || envelope.to }];
 
           // 3. Send over Port 443 (Safe from firewalls)
-          // 💡 FIXED: Replaced corporate 'https://brevo.com' Vercel address with actual Brevo v3 Email API Endpoint
+          // 🚀 CRITICAL FIX: Changed from 'https://brevo.com' to the actual Brevo API Endpoint
           const response = await fetch('https://brevo.com', {
             method: 'POST',
             headers: {
@@ -68,7 +72,6 @@ export async function getBrevoMailConfig(): Promise<MailerOptions> {
         }
       },
     },
-    // Keep this undefined so our custom send method can handle the rendering pipeline natively
     template: undefined, 
   };
 }
