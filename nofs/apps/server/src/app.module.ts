@@ -5,6 +5,7 @@ import { BusinessesModule } from './businesses/businesses.module';
 import { YelpModule } from './yelp/yelp.module';
 import { MailModule } from './mail/mail.module';
 import { TasksModule } from './tasks/tasks.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -15,5 +16,8 @@ import { TasksModule } from './tasks/tasks.module';
     YelpModule,
     TasksModule,
   ],
+  controllers: [AppController],
+
 })
 export class AppModule {}
+  
