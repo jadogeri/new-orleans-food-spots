@@ -62,7 +62,9 @@
         "YELP_API_KEY",
         "NODE_ENV",       
         "GMAIL_USER",
-        "GMAIL_APP_PASSWORD"
+        "GMAIL_APP_PASSWORD",
+        "BREVO_API_KEY",
+        "BREVO_SENDER_EMAIL"
       ]
     },
     "start": {
