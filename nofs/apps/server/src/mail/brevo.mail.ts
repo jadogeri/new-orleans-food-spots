@@ -4,7 +4,8 @@ import * as fs from 'node:fs/promises';
 import * as handlebars from 'handlebars';
 import { logger } from '../lib/logger';
 
-export function getBrevoMailConfig(): MailerOptions {
+// FIXED: Converted to an async function returning Promise<MailerOptions>
+export async function getBrevoMailConfig(): Promise<MailerOptions> {
   logger.info(
     { from: process.env.BREVO_SENDER_EMAIL },
     'Mail configured via Brevo HTTPS API on Port 443 (Production Mode Enabled)',
@@ -24,8 +25,6 @@ export function getBrevoMailConfig(): MailerOptions {
 
           // 1. Manually render the Handlebars template if it exists
           if (envelope.template) {
-            // FIX: Your template folder paths are structured as `${folder}/html` from MailService
-            // This safely appends the .hbs extension to the combined path (e.g., templates/welcome/html.hbs)
             const templatePath = join(__dirname, 'templates', `${envelope.template}.hbs`);
             const templateSource = await fs.readFile(templatePath, 'utf8');
             const compiledTemplate = handlebars.compile(templateSource);
