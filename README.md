@@ -300,11 +300,15 @@ Create environment variables (or set them in your hosting provider's secrets man
 | `BASE_PATH` | ✅ | Configuartion Routing path |
 | `SESSION_SECRET` | ✅ | Secret key for Better Auth session signing |
 | `YELP_API_KEY` | ✅ | Yelp Fusion API key |
-| `GMAIL_USER` | ✅ | Gmail address used to send emails |
+| `GMAIL_USER` | ✅ | Gmail address used to send emails (development)|
 | `GMAIL_APP_PASSWORD` | ✅ | Gmail App Password (not your login password) |
-| `FRONTEND_URL` | ☑ | Public URL of the app (used in email links) |
+| `BREVO_API_KEY` | ✅ | Brevo API key |
+| `BREVO_SENDER_EMAIL` | ✅ |  Brevo address used to send emails (production) |
+| `FRONTEND_URL` | ✅ | Public URL of the app (used in email links) |
 | `MAIL_FROM` | ☑ | Custom sender string, e.g. `"NOLA Spots" <noreply@example.com>` |
-| `BETTER_AUTH_URL` | ☑ | Base URL for Better Auth (defaults to localhost) |
+| `BETTER_AUTH_URL` | ✅ | Base URL for Better Auth (defaults to localhost) |
+|  `NODE_ENV`  | ☑ | Node environment mode (development 0r production) |
+
 
 > **Gmail App Password**: Go to Google Account → Security → 2-Step Verification → App Passwords → generate one for "Mail".
 
@@ -393,6 +397,9 @@ User → POST /api/auth/reset-password { email, currentPassword, newPassword }
 | 5 | Handlebars templates not found after bundling | esbuild bundles all `.ts` into `dist/main.js`; `__dirname` in bundled code = `dist/`, not `src/` | Added a `copyTemplates()` step to `build.mjs` that copies `src/mail/templates/` → `dist/mail/templates/` after every build |
 | 6 | `oslo` (Better Auth's password library) missing at runtime | Listed as an esbuild-bundled module but it is ESM-only, causing CJS conversion issues | Added `oslo` to esbuild `external` list; it resolves from `node_modules` (installed as a transitive dep of `better-auth`) |
 | 7 | Account lockout counter not decrementing on success | `loginAttempts` was only incremented on failure but never reset | Reset `loginAttempts` and `lockedUntil` to `0 / null` on every successful `signInEmail` call |
+| 8 | Server goes down or experiences slow responses due to cold starts | Render's free tier spins down web services after 15 minutes of inactivity | Set up Uptime Robot to monitor the site and ping it continuously, keeping the container warm and active |
+| 9 | Outbound emails fail to send or get blocked | Render blocks standard outbound SMTP ports (25, 465, 587) on their platform to prevent spam | Switched to Brevo as the production email provider using their API/SMTP service to bypass platform restrictions |
+| 10 | Emails land in spam or get blocked by recipient servers | Custom domain lacked proper DNS authentication records, triggering mail server spam filters | Purchased `josephadogeridev.com` via Spaceship and configured SPF, DKIM, and DMARC records to bypass SMTP blocking |
 
 ### Lessons Learned
 
@@ -402,6 +409,9 @@ User → POST /api/auth/reset-password { email, currentPassword, newPassword }
 - **Better Auth internal API surface**: Better Auth exposes server-side API methods (`auth.api.*`) that map to its HTTP endpoints. Using them programmatically (without a real HTTP round-trip) is more efficient but requires careful handling of the `headers` parameter. Passing an empty object `{}` works for internal calls.
 - **Turborepo caching saves significant CI time**: With `^build` dependencies, packages that haven't changed replay from cache. On a cold build the entire stack compiles in ~8 seconds; on a warm cache it's under 1 second.
 - **Zod v3 vs v4**: The workspace pins Zod v3. Importing from `zod/v4` in any package breaks the monorepo-wide type compatibility. Stick to the catalog version.
+* **Render Free Tier Cold Starts**: Paas platforms like Render spin down free services after 15 minutes of inactivity. Relying on organic traffic leads to high latency for the first user. External uptime monitors (e.g., Uptime Robot) are mandatory to keep containers warm.
+* **PaaS Cloud Egress Restrictions**: Modern cloud providers block standard SMTP ports (25, 465, 587) by default to prevent network spam. Transactional mail must leverage dedicated external APIs (like Brevo) or HTTP webhooks rather than raw server sockets.
+* **Domain Reputation and DNS Hygiene**: Buying a custom domain (via registrars like Spaceship) is only the first step. Proper email delivery requires complete DNS authentication records (SPF, DKIM, DMARC) to pass recipient inbox spam filters.
 
 ---
 
