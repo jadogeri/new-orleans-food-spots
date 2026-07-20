@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- TITLE                                                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="100" value="NOLA Spots — ERD Conceptual View" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="300" y="20" width="500" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="101" value="Conceptual ERD — entities and their high-level relationships only. No attributes, no data types." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+      <mxGeometry x="250" y="55" width="600" height="25" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ENTITY: USER                                               -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="10" value="USER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=16;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="320" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ENTITY: SESSION                                            -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="20" value="SESSION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="150" y="160" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ENTITY: ACCOUNT                                            -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="30" value="ACCOUNT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=16;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="750" y="160" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ENTITY: VERIFICATION                                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="40" value="VERIFICATION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=16;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="130" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ENTITY: SAVED_SPOT                                         -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="50" value="SAVED_SPOT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontStyle=1;fontSize=16;arcSize=10;" vertex="1" parent="1">
+      <mxGeometry x="450" y="500" width="180" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EXTERNAL CONCEPT: YELP BUSINESS (not stored)              -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="60" value="YELP BUSINESS&#xa;(external — not stored)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontStyle=3;fontSize=14;arcSize=10;dashed=1;" vertex="1" parent="1">
+      <mxGeometry x="700" y="500" width="220" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- RELATIONSHIPS                                              -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- USER has many SESSIONS -->
+    <mxCell id="70" value="has" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=13;fontStyle=2;" edge="1" source="10" target="20" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="71" value="1" style="resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="70">
+      <mxGeometry x="-1" relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="72" value="N" style="resizable=0;html=1;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="70">
+      <mxGeometry x="1" relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- USER has many ACCOUNTS -->
+    <mxCell id="73" value="has" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=13;fontStyle=2;" edge="1" source="10" target="30" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="74" value="1" style="resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="73">
+      <mxGeometry x="-1" relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="75" value="N" style="resizable=0;html=1;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="73">
+      <mxGeometry x="1" relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- USER has many SAVED_SPOTs -->
+    <mxCell id="76" value="saves" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=13;fontStyle=2;" edge="1" source="10" target="50" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="77" value="1" style="resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="76">
+      <mxGeometry x="-1" relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="78" value="N" style="resizable=0;html=1;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="76">
+      <mxGeometry x="1" relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- USER linked to VERIFICATION -->
+    <mxCell id="79" value="verified by" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=13;fontStyle=2;dashed=1;" edge="1" source="10" target="40" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="80" value="0..1" style="resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="79">
+      <mxGeometry x="-1" relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="81" value="N" style="resizable=0;html=1;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="79">
+      <mxGeometry x="1" relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- SAVED_SPOT references YELP BUSINESS -->
+    <mxCell id="82" value="references" style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=13;fontStyle=2;dashed=1;endArrow=open;endFill=0;" edge="1" source="50" target="60" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="83" value="N" style="resizable=0;html=1;align=left;verticalAlign=bottom;" connectable="0" vertex="1" parent="82">
+      <mxGeometry x="-1" relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="84" value="1" style="resizable=0;html=1;align=right;verticalAlign=bottom;" connectable="0" vertex="1" parent="82">
+      <mxGeometry x="1" relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- LEGEND                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="90" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="600" width="120" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="91" value="Auth entity (Better Auth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="60" y="635" width="180" height="35" as="geometry" />
+    </mxCell>
+    <mxCell id="92" value="Core user entity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="635" width="180" height="35" as="geometry" />
+    </mxCell>
+    <mxCell id="93" value="App-specific entity" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="460" y="635" width="180" height="35" as="geometry" />
+    </mxCell>
+    <mxCell id="94" value="Transient / verification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="660" y="635" width="180" height="35" as="geometry" />
+    </mxCell>
+    <mxCell id="95" value="External (not persisted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="860" y="635" width="180" height="35" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
