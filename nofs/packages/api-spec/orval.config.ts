@@ -55,6 +55,10 @@ export default defineConfig({
       clean: true,
       override: {
         zod: {
+          // 🔥 FIXED: Forces Orval to translate "format: email" into zod.string().email()
+          formats: {
+            email: "zod.string().email()",
+          },
           coerce: {
             query: ['boolean', 'number', 'string'],
             param: ['boolean', 'number', 'string'],
