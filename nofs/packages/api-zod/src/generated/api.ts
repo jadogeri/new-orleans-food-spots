@@ -80,7 +80,7 @@ export const ResetPasswordResponse = zod.object({
 export const GetMeResponse = zod.object({
   "id": zod.string(),
   "username": zod.string(),
-  "email": zod.string()
+  "email": zod.string().email()
 })
 
 
