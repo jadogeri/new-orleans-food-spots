@@ -1,9 +1,10 @@
 {
   "installCommand": "corepack pnpm@11.3.0 install --no-frozen-lockfile",
+  "outputDirectory": "apps/client/dist/public",
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://nola-spots-api.onrender.com/api/:path*"
+      "destination": "https://onrender.com*"
     },
     {
       "source": "/((?!assets/|.*\\..*).*)",
