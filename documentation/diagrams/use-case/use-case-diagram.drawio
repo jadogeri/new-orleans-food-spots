@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- SYSTEM BOUNDARY                                             -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="2" value="NOLA Spots Application" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#000000;fontSize=16;fontStyle=1;verticalAlign=top;align=center;" vertex="1" parent="1">
+      <mxGeometry x="220" y="40" width="700" height="760" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ACTOR: Guest (stick figure — umlActor)                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="3" value="Guest" style="shape=umlActor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="50" y="100" width="40" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- ACTOR: Registered User (stick figure — umlActor)           -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="4" value="Registered User" style="shape=umlActor;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="50" y="400" width="40" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EXTERNAL ACTOR: Yelp API (rectangle — external hardware/    -->
+    <!--   server convention)                                        -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="5" value="&lt;&lt;external system&gt;&gt;&#xa;Yelp Fusion API" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="990" y="200" width="150" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EXTERNAL ACTOR: Email Service (rectangle)                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="6" value="&lt;&lt;external system&gt;&gt;&#xa;Email Service&#xa;(Brevo / Gmail)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="990" y="580" width="150" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- USE CASES — Authentication Group                           -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- UC1: Register -->
+    <mxCell id="10" value="Register" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="80" width="160" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC2: Log In -->
+    <mxCell id="11" value="Log In" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="165" width="160" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC3: Log Out -->
+    <mxCell id="12" value="Log Out" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="250" width="160" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC4: Reset Password -->
+    <mxCell id="13" value="Reset Password" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="260" y="335" width="160" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- USE CASES — Food Spot Discovery Group                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- UC5: Search Food Spots -->
+    <mxCell id="20" value="Search Food Spots" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="500" y="80" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC6: View Food Spot Details -->
+    <mxCell id="21" value="View Food Spot Details" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="500" y="165" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- USE CASES — Saved Spots Group (auth required)              -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- UC7: Save Food Spot -->
+    <mxCell id="30" value="Save Food Spot" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="500" y="310" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC8: View Saved Spots -->
+    <mxCell id="31" value="View Saved Spots" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="500" y="395" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC9: Remove Saved Spot -->
+    <mxCell id="32" value="Remove Saved Spot" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="500" y="480" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC10: Manage Profile -->
+    <mxCell id="33" value="Manage Profile" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="500" y="565" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- USE CASES — Notifications Group                            -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!-- UC11: Receive Email Notifications -->
+    <mxCell id="40" value="Receive Email Notifications" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="730" y="590" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- UC12: Verify Email Address -->
+    <mxCell id="41" value="Verify Email Address" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="730" y="655" width="170" height="55" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EDGES: Guest → Use Cases                                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="50" edge="1" source="3" target="10" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="51" edge="1" source="3" target="11" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="52" edge="1" source="3" target="13" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="53" edge="1" source="3" target="20" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="54" edge="1" source="3" target="21" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EDGES: Registered User → Use Cases                         -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="60" edge="1" source="4" target="12" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="61" edge="1" source="4" target="20" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="62" edge="1" source="4" target="21" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="63" edge="1" source="4" target="30" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="64" edge="1" source="4" target="31" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="65" edge="1" source="4" target="32" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="66" edge="1" source="4" target="33" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="67" edge="1" source="4" target="40" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="68" edge="1" source="4" target="41" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- EDGES: Use Cases → External Systems                        -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="70" edge="1" source="20" target="5" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="71" edge="1" source="21" target="5" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="72" edge="1" source="40" target="6" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="73" edge="1" source="13" target="6" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="74" edge="1" source="10" target="6" style="endArrow=none;" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- «include» relationships                                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- Save Food Spot «include» Log In -->
+    <mxCell id="80" value="«include»" style="edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;fontSize=10;" edge="1" source="30" target="11" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Remove Saved Spot «include» Log In -->
+    <mxCell id="81" value="«include»" style="edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;fontSize=10;" edge="1" source="32" target="11" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- View Saved Spots «include» Log In -->
+    <mxCell id="82" value="«include»" style="edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;fontSize=10;" edge="1" source="31" target="11" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Manage Profile «include» Log In -->
+    <mxCell id="83" value="«include»" style="edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;fontSize=10;" edge="1" source="33" target="11" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- Verify Email «extend» Register -->
+    <mxCell id="84" value="«extend»" style="edgeStyle=orthogonalEdgeStyle;dashed=1;endArrow=open;endFill=0;fontSize=10;" edge="1" source="41" target="10" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- LEGEND                                                      -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <mxCell id="90" value="Legend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="30" y="680" width="160" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="91" value="Stick Figure = Human Actor" style="shape=umlActor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="720" width="30" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="92" value="Oval = Use Case" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="70" y="725" width="110" height="35" as="geometry" />
+    </mxCell>
+    <mxCell id="93" value="Rectangle = External System" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="30" y="775" width="150" height="35" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
