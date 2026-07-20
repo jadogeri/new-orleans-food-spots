@@ -1,11 +1,12 @@
 {
+  "installCommand": "corepack pnpm@11.3.0 install --no-frozen-lockfile",
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "https://nola-spots-api.onrender.com/api/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
