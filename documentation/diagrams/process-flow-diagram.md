@@ -50,34 +50,34 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    HOME[/home page/] --> SEARCH["User enters search term\n& optional filters"]
-    SEARCH --> CALL_SEARCH["GET /api/spots/search\n?term=&location=New+Orleans&..."]
+    CARD["User clicks bookmark icon\non a food spot"] --> AUTH_CHECK{"Session\nauthenticated?"}
 
-    CALL_SEARCH --> VALIDATE_PARAMS{"Zod validation\npassed?"}
-    VALIDATE_PARAMS -- No --> ERR400["400 Bad Request\nShow field errors"]
-    ERR400 --> SEARCH
+    AUTH_CHECK -- No --> REDIRECT_LOGIN["Redirect to /sign-in\nwith return URL"]
+    REDIRECT_LOGIN --> LOGIN_DONE["User logs in"] --> CARD
 
-    VALIDATE_PARAMS -- Yes --> CALL_YELP["Yelp Fusion API\nGET /businesses/search"]
-    CALL_YELP --> YELP_RESP{"Yelp response\nstatus?"}
+    AUTH_CHECK -- Yes --> CALL_SAVE["POST /api/spots/saved\n {yelpId, name, imageUrl, ...}"]
+    CALL_SAVE --> ALREADY_SAVED{"409 conflict?\nSpot already saved?"}
 
-    YELP_RESP -- 200 OK --> MAP_RESULTS["Map to SpotDto[]\n& return to frontend"]
-    MAP_RESULTS --> RESULTS_COUNT{"Results count > 0?"}
-    RESULTS_COUNT -- 0 --> EMPTY_STATE["Render empty state\n'No spots found'"]
-    RESULTS_COUNT -- "> 0" --> RENDER_CARDS["Render restaurant cards\nname · photo · rating · category"]
-    EMPTY_STATE --> SEARCH
+    ALREADY_SAVED -- Yes --> TOAST_EXISTS["Show #quot;Already in saved spots#quot;\ntoast — no change"]
+    ALREADY_SAVED -- "No 201" --> INSERT_ROW["INSERT INTO saved_spot"]
+    INSERT_ROW --> BOOKMARK_UPDATE["Update bookmark icon to filled\nShow success toast"]
 
-    YELP_RESP -- 429 Rate Limited --> ERR429["Show rate-limit toast\n'Try again shortly'"]
-    ERR429 --> HOME
-    YELP_RESP -- 5xx Error --> ERR502["Show error state\n502 Bad Gateway"]
-    ERR502 --> HOME
+    BOOKMARK_UPDATE --> VIEW_SAVED{"User navigates\nto /saved?"}
+    VIEW_SAVED -- No --> CONTINUE["Continue browsing"]
+    VIEW_SAVED -- Yes --> CALL_SAVED["GET /api/spots/saved\nSELECT WHERE userId = ?"]
+    CALL_SAVED --> SAVED_COUNT{"Saved spots count > 0?"}
 
-    RENDER_CARDS --> USER_ACTION{"User action?"}
-    USER_ACTION -- View details --> CALL_DETAIL["GET /api/spots/:yelpId\nYelp business detail"]
-    CALL_DETAIL --> RENDER_DETAIL["Render detail view\nphotos · hours · address · phone"]
-    RENDER_DETAIL --> USER_ACTION
-    USER_ACTION -- Save spot --> SAVE_FLOW["UC7 — Save Food Spot"]
-    USER_ACTION -- Search again --> SEARCH
-    USER_ACTION -- Navigate away --> HOME
+    SAVED_COUNT -- 0 --> EMPTY_SAVED["Render empty state\n#quot;No saved spots yet — explore!#quot;"]
+    SAVED_COUNT -- "> 0" --> RENDER_SAVED["Render saved spots grid\nwith Remove button"]
+
+    RENDER_SAVED --> REMOVE_ACTION{"User clicks Remove?"}
+    REMOVE_ACTION -- No --> CONTINUE
+    REMOVE_ACTION -- Yes --> CALL_DELETE["DELETE /api/spots/saved/:id\nWHERE id=? AND userId=?"]
+    CALL_DELETE --> DELETE_RESP{"Response?"}
+    DELETE_RESP -- 204 No Content --> REMOVE_CARD["Remove card from list\nShow removal toast"]
+    DELETE_RESP -- 404 Not Found --> ERR_TOAST["Show error toast"]
+    REMOVE_CARD --> RENDER_SAVED
+    ERR_TOAST --> RENDER_SAVED
 
 ```
 
@@ -87,34 +87,35 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    CARD[User clicks bookmark icon\non a food spot] --> AUTH_CHECK{Session\nauthenticated?}
+    CARD["User clicks bookmark icon\non a food spot"] --> AUTH_CHECK{"Session\nauthenticated?"}
 
-    AUTH_CHECK -- No --> REDIRECT_LOGIN[Redirect to /sign-in\nwith return URL]
-    REDIRECT_LOGIN --> LOGIN_DONE[User logs in] --> CARD
+    AUTH_CHECK -- No --> REDIRECT_LOGIN["Redirect to /sign-in\nwith return URL"]
+    REDIRECT_LOGIN --> LOGIN_DONE["User logs in"] --> CARD
 
-    AUTH_CHECK -- Yes --> CALL_SAVE[POST /api/spots/saved\n{yelpId, name, imageUrl, ...}]
-    CALL_SAVE --> ALREADY_SAVED{409 conflict?\nSpot already saved?}
+    AUTH_CHECK -- Yes --> CALL_SAVE["POST /api/spots/saved\n{yelpId, name, imageUrl, ...}"]
+    CALL_SAVE --> ALREADY_SAVED{"409 conflict?\nSpot already saved?"}
 
-    ALREADY_SAVED -- Yes --> TOAST_EXISTS[Show "Already in saved spots"\ntoast — no change]
-    ALREADY_SAVED -- No 201 --> INSERT_ROW[INSERT INTO saved_spot]
-    INSERT_ROW --> BOOKMARK_UPDATE[Update bookmark icon to filled\nShow success toast]
+    ALREADY_SAVED -- Yes --> TOAST_EXISTS["Show 'Already in saved spots'\ntoast — no change"]
+    ALREADY_SAVED -- "No 201" --> INSERT_ROW["INSERT INTO saved_spot"]
+    INSERT_ROW --> BOOKMARK_UPDATE["Update bookmark icon to filled\nShow success toast"]
 
-    BOOKMARK_UPDATE --> VIEW_SAVED{User navigates\nto /saved?}
-    VIEW_SAVED -- No --> CONTINUE[Continue browsing]
-    VIEW_SAVED -- Yes --> CALL_SAVED[GET /api/spots/saved\nSELECT WHERE userId = ?]
-    CALL_SAVED --> SAVED_COUNT{Saved spots\ncount > 0?}
+    BOOKMARK_UPDATE --> VIEW_SAVED{"User navigates\nto /saved?"}
+    VIEW_SAVED -- No --> CONTINUE["Continue browsing"]
+    VIEW_SAVED -- Yes --> CALL_SAVED["GET /api/spots/saved\nSELECT WHERE userId = ?"]
+    CALL_SAVED --> SAVED_COUNT{"Saved spots count > 0?"}
 
-    SAVED_COUNT -- 0 --> EMPTY_SAVED[Render empty state\n"No saved spots yet — explore!"]
-    SAVED_COUNT -- > 0 --> RENDER_SAVED[Render saved spots grid\nwith Remove button]
+    SAVED_COUNT -- 0 --> EMPTY_SAVED["Render empty state\n'No saved spots yet — explore!'"]
+    SAVED_COUNT -- "> 0" --> RENDER_SAVED["Render saved spots grid\nwith Remove button"]
 
-    RENDER_SAVED --> REMOVE_ACTION{User clicks Remove?}
+    RENDER_SAVED --> REMOVE_ACTION{"User clicks Remove?"}
     REMOVE_ACTION -- No --> CONTINUE
-    REMOVE_ACTION -- Yes --> CALL_DELETE[DELETE /api/spots/saved/:id\nWHERE id=? AND userId=?]
-    CALL_DELETE --> DELETE_RESP{Response?}
-    DELETE_RESP -- 204 No Content --> REMOVE_CARD[Remove card from list\nShow removal toast]
-    DELETE_RESP -- 404 Not Found --> ERR_TOAST[Show error toast]
+    REMOVE_ACTION -- Yes --> CALL_DELETE["DELETE /api/spots/saved/:id\nWHERE id=? AND userId=?"]
+    CALL_DELETE --> DELETE_RESP{"Response?"}
+    DELETE_RESP -- 204 No Content --> REMOVE_CARD["Remove card from list\nShow removal toast"]
+    DELETE_RESP -- 404 Not Found --> ERR_TOAST["Show error toast"]
     REMOVE_CARD --> RENDER_SAVED
     ERR_TOAST --> RENDER_SAVED
+
 ```
 
 ---
