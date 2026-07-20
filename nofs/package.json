@@ -25,9 +25,6 @@
     "server:test:coverage": "pnpm --filter server run test:coverage"
   },
   "devDependencies": {
-    "@rollup/rollup-win32-x64-msvc": "^4.60.4",
-    "@tailwindcss/oxide-win32-x64-msvc": "^4.3.0",
-    "lightningcss-win32-x64-msvc": "^1.32.0",
     "prettier": "^3.7.4",
     "turbo": "^2.9.14",
     "typescript": "5.9.2"
