@@ -63,7 +63,7 @@ export const LogoutResponse = zod.unknown()
  * @summary Request a temporary password via email
  */
 export const ForgotPasswordBody = zod.object({
-  "email": zod.email()
+  "email": zod.string()
 })
 
 export const ForgotPasswordResponse = zod.object({
@@ -79,7 +79,7 @@ export const resetPasswordBodyNewPasswordMin = 8;
 
 
 export const ResetPasswordBody = zod.object({
-  "email": zod.email(),
+  "email": zod.string(),
   "currentPassword": zod.string(),
   "newPassword": zod.string().min(resetPasswordBodyNewPasswordMin)
 })

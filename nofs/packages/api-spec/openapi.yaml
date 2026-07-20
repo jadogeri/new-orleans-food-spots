@@ -308,7 +308,6 @@ components:
       properties:
         email:
           type: string
-          format: email
 
     ResetPasswordInput:
       type: object
@@ -316,7 +315,6 @@ components:
       properties:
         email:
           type: string
-          format: email
         currentPassword:
           type: string
         newPassword:

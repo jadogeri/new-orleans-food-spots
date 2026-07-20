@@ -35,10 +35,10 @@ export default defineConfig({
         mutator: {
           path: path.resolve(apiClientReactSrc, "custom-fetch.ts"),
           name: "customFetch",
+          },
         },
       },
     },
-  },
   zod: {
     input: {
       target: "./openapi.yaml",
@@ -54,11 +54,9 @@ export default defineConfig({
       mode: "split",
       clean: true,
       override: {
+        // 🔥 FIXED: Standard mapping pattern using direct schema functional definitions
+        operations: {},
         zod: {
-          // 🔥 FIXED: Forces Orval to translate "format: email" into zod.string().email()
-          formats: {
-            email: "zod.string().email()",
-          },
           coerce: {
             query: ['boolean', 'number', 'string'],
             param: ['boolean', 'number', 'string'],
