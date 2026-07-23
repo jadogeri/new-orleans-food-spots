@@ -185,9 +185,9 @@ graph TD
 ### **3.3 Folder Structure**
 
 ```
-nola-spots/
-├── artifacts/
-│   ├── api-server/               # NestJS backend
+nofs/
+├── apps/
+│   ├── server/                   # NestJS backend
 │   │   ├── src/
 │   │   │   ├── main.ts           # Bootstrap (port, CORS, global prefix)
 │   │   │   ├── app.module.ts     # Root module
@@ -203,8 +203,8 @@ nola-spots/
 │   │   │   ├── tasks/            # Scheduled cron jobs
 │   │   │   └── yelp/             # Yelp Fusion search
 │   │   └── build.mjs             # esbuild + SWC build script
-│   └── nola-food/                # React/Vite frontend
-├── lib/
+│   └── client/                   # React/Vite frontend
+├── packages/
 │   ├── api-spec/                 # OpenAPI spec (source of truth)
 │   ├── api-zod/                  # Generated Zod schemas
 │   ├── api-client-react/         # Generated TanStack Query hooks
