@@ -270,8 +270,9 @@ Managed by Better Auth. Purged nightly by the session-cleanup cron job.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/jadogeri/nola-spots.git
-cd nola-spots
+git clone https://github.com/jadogeri/new-orleans-food-spots
+.git
+cd new-orleans-food-spots
 
 # 2. Install all workspace dependencies
 pnpm install
@@ -319,10 +320,10 @@ Create environment variables (or set them in your hosting provider's secrets man
 
 ```bash
 # Start the API server (builds first, then runs)
-pnpm --filter @repo/api-server run dev
+pnpm --filter @repo/server run dev
 
 # Start the React frontend
-pnpm --filter @repo/nola-food run dev
+pnpm --filter @repo/client run dev
 
 # Full typecheck (all workspace packages)
 pnpm run typecheck
